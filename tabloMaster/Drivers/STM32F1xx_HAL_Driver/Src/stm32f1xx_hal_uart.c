@@ -175,6 +175,13 @@
 /** @addtogroup UART_Private_Functions   UART Private Functions
   * @{
   */
+
+
+//USER CODE BEGIN////////
+void USER_UART_Receive_IT(UART_HandleTypeDef *huart);
+//USER CODE END////////
+
+
 static void UART_SetConfig (UART_HandleTypeDef *huart);
 static HAL_StatusTypeDef UART_Transmit_IT(UART_HandleTypeDef *huart);
 static HAL_StatusTypeDef UART_EndTransmit_IT(UART_HandleTypeDef *huart);
@@ -925,6 +932,70 @@ HAL_StatusTypeDef HAL_UART_Receive_IT(UART_HandleTypeDef *huart, uint8_t *pData,
   }
 }
 
+
+/* USER CODE BEGIN 0 */
+void USER_UART_Recieve_INIT(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t buffSize)
+{
+	   huart->pRxBuffPtr = pData;
+	   huart->RxXferSize = buffSize;
+	   huart->RxXferCount = 0;
+
+
+       /* Enable the UART Parity Error Interrupt */
+        __HAL_UART_ENABLE_IT(huart, UART_IT_PE);
+
+        /* Enable the UART Error Interrupt: (Frame error, noise error, overrun error) */
+        __HAL_UART_ENABLE_IT(huart, UART_IT_ERR);
+
+        /* Enable the UART Data Register not empty Interrupt */
+        __HAL_UART_ENABLE_IT(huart, UART_IT_RXNE);
+
+}
+
+void USER_UART_Receive_IT(UART_HandleTypeDef *huart)
+{
+	   uint16_t* tmp;
+	   if(huart->Init.WordLength == UART_WORDLENGTH_9B)
+		  {
+			tmp = (uint16_t*) huart->pRxBuffPtr;
+			if(huart->Init.Parity == UART_PARITY_NONE)
+			{
+			  *tmp = (uint16_t)(huart->Instance->DR & (uint16_t)0x01FF);
+			  huart->pRxBuffPtr += 2;
+			}
+			else
+			{
+			  *tmp = (uint16_t)(huart->Instance->DR & (uint16_t)0x00FF);
+			  huart->pRxBuffPtr += 1;
+			}
+		  }
+		  else
+		  {
+			if(huart->Init.Parity == UART_PARITY_NONE)
+			{
+			  *huart->pRxBuffPtr++ = (uint8_t)(huart->Instance->DR & (uint8_t)0x00FF);
+			}
+			else
+			{
+			  *huart->pRxBuffPtr++ = (uint8_t)(huart->Instance->DR & (uint8_t)0x007F);
+			}
+		  }
+	   if (huart->RxXferCount<huart->RxXferSize)
+	   {
+		   huart->RxXferCount++;
+	   }
+	   else
+	   {
+		   huart->RxXferCount = 0;
+	   }
+
+	   //TO DO ////// нужно отладить
+		//   huart->resrtTimer();
+
+}
+
+/* USER CODE END 0 */
+
 /**
   * @brief  Sends an amount of data in non blocking mode. 
   * @param  huart: Pointer to a UART_HandleTypeDef structure that contains
@@ -1225,7 +1296,10 @@ void HAL_UART_IRQHandler(UART_HandleTypeDef *huart)
   /* UART in mode Receiver ---------------------------------------------------*/
   if((tmp_flag != RESET) && (tmp_it_source != RESET))
   { 
-    UART_Receive_IT(huart);
+	//USER CODE BEGIN//
+	USER_UART_Receive_IT(huart);
+	//USER CODE END
+    //UART_Receive_IT(huart);
   }
   
   tmp_flag = __HAL_UART_GET_FLAG(huart, UART_FLAG_TXE);
@@ -1786,6 +1860,10 @@ static HAL_StatusTypeDef UART_EndTransmit_IT(UART_HandleTypeDef *huart)
   
   HAL_UART_TxCpltCallback(huart);
   
+  /* USER CODE BEGIN 1 */
+	   huart->rs485FlowControlFunction();
+  /* USER CODE END 1 */
+
   return HAL_OK;
 }
 

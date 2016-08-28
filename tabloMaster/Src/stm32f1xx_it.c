@@ -35,7 +35,10 @@
 #include "stm32f1xx.h"
 #include "stm32f1xx_it.h"
 
+
+
 /* USER CODE BEGIN 0 */
+#include "main.h"
 
 /* USER CODE END 0 */
 
@@ -181,6 +184,14 @@ void SysTick_Handler(void)
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   HAL_SYSTICK_IRQHandler();
+  if (timer1<TIMER_1_STOP_VALUE)
+	  timer1++;
+
+  if (timer2<timerStopValue)
+	  timer2++;
+
+  if (driverTimer)
+	  driverTimer--;
   /* USER CODE BEGIN SysTick_IRQn 1 */
 
   /* USER CODE END SysTick_IRQn 1 */
@@ -230,6 +241,7 @@ void TIM2_IRQHandler(void)
 
   /* USER CODE END TIM2_IRQn 0 */
   HAL_TIM_IRQHandler(&htim2);
+
   /* USER CODE BEGIN TIM2_IRQn 1 */
 
   /* USER CODE END TIM2_IRQn 1 */
@@ -301,6 +313,7 @@ void TIM6_IRQHandler(void)
   /* USER CODE END TIM6_IRQn 0 */
   HAL_TIM_IRQHandler(&htim6);
   /* USER CODE BEGIN TIM6_IRQn 1 */
+
 
   /* USER CODE END TIM6_IRQn 1 */
 }

@@ -302,6 +302,7 @@ void              HAL_DBGMCU_DisableDBGStopMode(void);
 void              HAL_DBGMCU_EnableDBGStandbyMode(void);
 void              HAL_DBGMCU_DisableDBGStandbyMode(void);
 
+
 /**
   * @}
   */

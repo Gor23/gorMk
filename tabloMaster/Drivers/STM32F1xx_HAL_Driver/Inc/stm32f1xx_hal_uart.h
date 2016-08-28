@@ -141,6 +141,13 @@ typedef struct
   __IO HAL_UART_StateTypeDef    State;            /*!< UART communication state           */
   
   __IO uint32_t                 ErrorCode;        /*!< UART Error code                    */
+  /* USER CODE BEGIN 0 */
+
+  void (*rs485FlowControlFunction)();	  /*!< pointer on function to control flow control, set by user */
+
+  void (*resrtTimer)();						  /*!<pointer on function, which control packet recieve, set by user */
+
+  /* USER CODE END 0 */
 
 }UART_HandleTypeDef;
 
@@ -698,6 +705,9 @@ void HAL_UART_TxHalfCpltCallback(UART_HandleTypeDef *huart);
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
 void HAL_UART_RxHalfCpltCallback(UART_HandleTypeDef *huart);
 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart);
+//USER CODE BEGIN///
+void USER_UART_Recieve_INIT(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size);
+//USER CODE END///
 
 /**
   * @}
