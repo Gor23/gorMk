@@ -243,7 +243,8 @@ void TIM2_IRQHandler(void)
   HAL_TIM_IRQHandler(&htim2);
 
   /* USER CODE BEGIN TIM2_IRQn 1 */
-
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_12, GPIO_PIN_RESET);
+  HAL_TIM_Base_Stop_IT(&htim2);
   /* USER CODE END TIM2_IRQn 1 */
 }
 
@@ -341,6 +342,7 @@ void DMA2_Channel4_5_IRQHandler(void)
 
   /* USER CODE END DMA2_Channel4_5_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_uart4_tx);
+  dmaSend = 0;
   /* USER CODE BEGIN DMA2_Channel4_5_IRQn 1 */
 
   /* USER CODE END DMA2_Channel4_5_IRQn 1 */

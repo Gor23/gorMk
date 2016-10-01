@@ -952,11 +952,23 @@ void USER_UART_Recieve_INIT(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t 
 
 }
 
+void USER_UART_Clear_Recieve_Buffer(UART_HandleTypeDef *huart, uint16_t buffSize)
+{
+	 memset (huart->pRxBuffPtr, 0x00 ,sizeof(huart->RxXferSize = buffSize));
+	   huart->RxXferCount = 0;
+
+}
+
 void USER_UART_Receive_IT(UART_HandleTypeDef *huart)
 {
 	   uint16_t* tmp;
+	   if (huart->RxXferCount>huart->RxXferSize)
+	   {
+		   huart->RxXferCount = 0;
+	   }
 	   if(huart->Init.WordLength == UART_WORDLENGTH_9B)
 		  {
+		   //TODO change like in else (huart->pRxBuffPtr[huart->RxXferCount++])
 			tmp = (uint16_t*) huart->pRxBuffPtr;
 			if(huart->Init.Parity == UART_PARITY_NONE)
 			{
@@ -973,21 +985,15 @@ void USER_UART_Receive_IT(UART_HandleTypeDef *huart)
 		  {
 			if(huart->Init.Parity == UART_PARITY_NONE)
 			{
-			  *huart->pRxBuffPtr++ = (uint8_t)(huart->Instance->DR & (uint8_t)0x00FF);
+			  huart->pRxBuffPtr[huart->RxXferCount++] = (uint8_t)(huart->Instance->DR & (uint8_t)0x00FF);
 			}
 			else
 			{
-			  *huart->pRxBuffPtr++ = (uint8_t)(huart->Instance->DR & (uint8_t)0x007F);
+			  huart->pRxBuffPtr[huart->RxXferCount++] = (uint8_t)(huart->Instance->DR & (uint8_t)0x007F);
 			}
 		  }
-	   if (huart->RxXferCount<huart->RxXferSize)
-	   {
-		   huart->RxXferCount++;
-	   }
-	   else
-	   {
-		   huart->RxXferCount = 0;
-	   }
+
+
 
 	   //TO DO ////// нужно отладить
 		//   huart->resrtTimer();

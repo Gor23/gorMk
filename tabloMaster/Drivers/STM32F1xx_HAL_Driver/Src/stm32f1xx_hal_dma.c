@@ -362,7 +362,7 @@ HAL_StatusTypeDef HAL_DMA_Start_IT(DMA_HandleTypeDef *hdma, uint32_t SrcAddress,
   __HAL_DMA_ENABLE_IT(hdma, DMA_IT_TC);
 
   /* Enable the Half transfer complete interrupt */
-  __HAL_DMA_ENABLE_IT(hdma, DMA_IT_HT);  
+  //__HAL_DMA_ENABLE_IT(hdma, DMA_IT_HT);
 
   /* Enable the transfer Error interrupt */
   __HAL_DMA_ENABLE_IT(hdma, DMA_IT_TE);
@@ -600,6 +600,7 @@ void HAL_DMA_IRQHandler(DMA_HandleTypeDef *hdma)
       {       
         /* Transfer complete callback */
         hdma->XferCpltCallback(hdma);
+        hdma->rs485FlowControlFunction();
       }
     }
   }

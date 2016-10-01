@@ -175,6 +175,24 @@ void Video_text_buffer_create()
 
 };
 
+void Video_change_buffers (videoBuff *vbPtr, uint8_t *firstBuff, uint8_t *secondBuff)
+{
+	if (vbPtr->writeFlag)
+	{
+		vbPtr->bufferArrayPtr = secondBuff;
+		vbPtr->readBufferArrayPointer = firstBuff;
+		vbPtr->writeFlag = 0;
+	}
+	else
+	{
+		vbPtr->bufferArrayPtr = firstBuff;
+		vbPtr->readBufferArrayPointer = secondBuff;
+		vbPtr->writeFlag = 1;
+	}
+
+	;
+}
+
 
 
 void Video_put_string (text *textPtr, image *videoBuffPtr)
@@ -353,7 +371,7 @@ void Video_move_image (image *imgPtr, videoBuff *videoBuffPtr, uint16_t xMove, u
 	imgPtr->yOffset = videoBuffPtr->xLength*yMove;
 }
 
-uint8_t Video_put_gif (imageGif *imgPtr, videoBuff *videoBuffPtr)
+uint8_t Video_put_gif (imageGif *imgPtr, videoBuff *videoBuffPtr, uint8_t invertFlag)
 {
 
 	uint16_t y = 0;
@@ -374,7 +392,8 @@ uint8_t Video_put_gif (imageGif *imgPtr, videoBuff *videoBuffPtr)
 		{
 			if (temp<videoBuffPtr->size)
 			{
-				videoBuffPtr->bufferArrayPtr[temp++] = frameArrayPtr[imagrByteCounter++];
+				if (invertFlag) videoBuffPtr->bufferArrayPtr[temp++] = ~frameArrayPtr[imagrByteCounter++];
+				else videoBuffPtr->bufferArrayPtr[temp++] = frameArrayPtr[imagrByteCounter++];
 			}
 			else
 			{

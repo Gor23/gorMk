@@ -40,6 +40,8 @@ extern DMA_HandleTypeDef hdma_uart4_tx;
 
 extern DMA_HandleTypeDef hdma_usart1_tx;
 
+extern void dma_trancieve_callback ( struct __DMA_HandleTypeDef * hdma);
+
 extern void Error_Handler(void);
 /* USER CODE BEGIN 0 */
 
@@ -370,7 +372,6 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
     HAL_NVIC_SetPriority(UART4_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(UART4_IRQn);
   /* USER CODE BEGIN UART4_MspInit 1 */
-
   /* USER CODE END UART4_MspInit 1 */
   }
   else if(huart->Instance==USART1)

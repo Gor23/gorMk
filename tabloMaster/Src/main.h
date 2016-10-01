@@ -8,10 +8,15 @@
 #ifndef MAIN_H_
 #define MAIN_H_
 
+#define false 0
+#define true 1
+
 #define UART_SPEED 256000
 
 #define xMatrix	2
 #define yMatrix 2
+
+
 
 #define TRANCIEVE_ARRAY_SIZE 	256*xMatrix*yMatrix
 #define RECIEVE_BUFFER_SIZE 	10
@@ -22,6 +27,8 @@
 
 #define TIMER_1_STOP_VALUE	100
 #define TIMER_2_STOP_VALUE	200
+
+#define	HUART4_RECIEVE_TIMEOUT 70
 
 #define NO_ANSWER_TIMEOUT 20
 

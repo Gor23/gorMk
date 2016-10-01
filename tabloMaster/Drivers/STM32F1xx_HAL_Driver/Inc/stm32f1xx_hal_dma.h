@@ -142,7 +142,9 @@ typedef struct __DMA_HandleTypeDef
   void                  (* XferHalfCpltCallback)( struct __DMA_HandleTypeDef * hdma); /*!< DMA Half transfer complete callback    */
   
   void                  (* XferErrorCallback)( struct __DMA_HandleTypeDef * hdma);    /*!< DMA transfer error callback            */
-  
+  /* USER CODE BEGIN 0 */
+  void (*rs485FlowControlFunction)();	  												/*!< pointer on function to control flow control, set by user */
+  /* USER CODE END 0 */
   __IO uint32_t         ErrorCode;                                                    /*!< DMA Error code                         */
 } DMA_HandleTypeDef;    
 /**
