@@ -156,6 +156,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f1xx_hal.h"
+#include <string.h>
 
 /** @addtogroup STM32F1xx_HAL_Driver
   * @{
@@ -952,9 +953,22 @@ void USER_UART_Recieve_INIT(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t 
 
 }
 
+void USER_UART_Recieve_STOP(UART_HandleTypeDef *huart)
+{
+  /* Enable the UART Parity Error Interrupt */
+   __HAL_UART_DISABLE_IT(huart, UART_IT_PE);
+
+   /* Enable the UART Error Interrupt: (Frame error, noise error, overrun error) */
+   __HAL_UART_DISABLE_IT(huart, UART_IT_ERR);
+
+   /* Enable the UART Data Register not empty Interrupt */
+   __HAL_UART_DISABLE_IT(huart, UART_IT_RXNE);
+
+}
+
 void USER_UART_Clear_Recieve_Buffer(UART_HandleTypeDef *huart, uint16_t buffSize)
 {
-	 memset (huart->pRxBuffPtr, 0x00 ,sizeof(huart->RxXferSize = buffSize));
+	 memset (huart->pRxBuffPtr, 0x00 ,buffSize);
 	   huart->RxXferCount = 0;
 
 }
@@ -962,6 +976,7 @@ void USER_UART_Clear_Recieve_Buffer(UART_HandleTypeDef *huart, uint16_t buffSize
 void USER_UART_Receive_IT(UART_HandleTypeDef *huart)
 {
 	   uint16_t* tmp;
+	   huart -> resrtTimer();
 	   if (huart->RxXferCount>huart->RxXferSize)
 	   {
 		   huart->RxXferCount = 0;

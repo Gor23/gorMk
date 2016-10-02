@@ -8,6 +8,9 @@
 #ifndef MAIN_H_
 #define MAIN_H_
 
+#include <stdint.h>
+#include "stm32f1xx_hal.h"
+
 #define false 0
 #define true 1
 
@@ -39,6 +42,9 @@ enum modes {
 enum driverStatus {
 	INIT, CHANGE_BUFER, ANSWER_CHECK, SEND_DATA, WAIT_FOR_DATA_IS_SEND
 };
+
+extern TIM_HandleTypeDef htim6;
+extern UART_HandleTypeDef huart2;
 
 extern volatile uint32_t timer1;
 extern volatile uint32_t timer2;

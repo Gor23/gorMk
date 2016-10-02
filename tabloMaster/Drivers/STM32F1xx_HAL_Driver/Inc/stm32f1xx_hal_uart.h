@@ -708,6 +708,7 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart);
 //USER CODE BEGIN///
 void USER_UART_Recieve_INIT(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size);
 void USER_UART_Clear_Recieve_Buffer(UART_HandleTypeDef *huart, uint16_t buffSize);
+void USER_UART_Recieve_STOP(UART_HandleTypeDef *huart);
 //USER CODE END///
 
 /**
