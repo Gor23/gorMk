@@ -350,7 +350,7 @@ HAL_StatusTypeDef HAL_TIM_Base_Start_IT(TIM_HandleTypeDef *htim)
   assert_param(IS_TIM_INSTANCE(htim->Instance));
 
    /* Enable the TIM Update interrupt */
-   __HAL_TIM_ENABLE_IT(htim, TIM_IT_UPDATE);
+  __HAL_TIM_ENABLE_IT(htim, TIM_IT_UPDATE);
 
    /* Enable the Peripheral */
   __HAL_TIM_ENABLE(htim);

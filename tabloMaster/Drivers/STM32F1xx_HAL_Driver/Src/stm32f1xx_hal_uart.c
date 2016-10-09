@@ -976,7 +976,14 @@ void USER_UART_Clear_Recieve_Buffer(UART_HandleTypeDef *huart, uint16_t buffSize
 void USER_UART_Receive_IT(UART_HandleTypeDef *huart)
 {
 	   uint16_t* tmp;
-	   huart -> resrtTimer();
+	   if (huart->RxXferCount == 0)
+	     {
+	       huart -> resrtTimer(0xFF);
+	     }
+	   else
+	     {
+	       huart -> resrtTimer(0);
+	     }
 	   if (huart->RxXferCount>huart->RxXferSize)
 	   {
 		   huart->RxXferCount = 0;

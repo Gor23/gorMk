@@ -18,7 +18,7 @@
 #define WIFI_UART 	huart2
 #define WIFI_TIMER	htim6
 
-#define WIFI_RECEIVE_TIME_TRIGER 100
+#define WIFI_RECEIVE_TIME_TRIGER 3000
 
 extern char wifiRecieveArray [WIFI_RECIEVE_ARRAY_SIZE];
 extern char valueArray[JSON_VALUE_MAX_LENGTH];

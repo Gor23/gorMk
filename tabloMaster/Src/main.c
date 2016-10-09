@@ -69,7 +69,10 @@ void
 uart4_trancieve (void);
 void
 dma_trancieve_callback (void);
-
+void
+uart2_start_recieve_trigger (uint8_t isNeedTurnOn);
+void
+void_function (uint8_t in);
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -234,7 +237,7 @@ main (void)
   MX_UART4_Init ();
   MX_USART1_UART_Init ();
   MX_USART2_UART_Init ();
-//  MX_TIM6_Init();
+  MX_TIM6_Init();
 //  MX_TIM7_Init();
   uint8_t yPosition = 0;
   uint8_t frame = 0;
@@ -478,10 +481,10 @@ main (void)
 		 //(HAL_UART_Transmit_IT(&huart2, (uint8_t*)"BUFC\n", strlen("BUFC\n")) != HAL_OK);
 		 //USER_UART_enable_RX_IT (&huart2);
 		 HAL_Delay(3);
-		 while (!ptr)
-		 {
-			 ptr = strstr((char*)uartRecieveBuffer, "0123");
-		 }
+//		 while (!ptr)
+//		 {
+//			 ptr = strstr((char*)uartRecieveBuffer, "0123");
+//		 }
 		 ptr = NULL;
 		 USER_UART_Clear_Recieve_Buffer(&huart4, sizeof(uartRecieveBuffer));
 		// USER_UART_clear_rx(&huart2);
@@ -624,13 +627,17 @@ dma_trancieve_callback (void)
 }
 
 void
-uart2_start_recieve_trigger (void)
+uart2_start_recieve_trigger (uint8_t isNeedTurnOn)
 {
-  HAL_TIM_Base_Start_IT (&htim6);
+  htim6.Instance->CNT = 0;
+  if(isNeedTurnOn != 0)
+    {
+      htim6.Instance->CR1 |= TIM_CR1_CEN;
+    }
 }
 
 void
-void_function (void)
+void_function (uint8_t in)
 {
 
 }
@@ -817,6 +824,9 @@ MX_TIM6_Init (void)
       Error_Handler ();
     }
   HAL_NVIC_EnableIRQ (TIM6_IRQn);
+  /* USER CODE BEGIN 5 */
+  __HAL_TIM_ENABLE_IT(&htim6, TIM_IT_UPDATE);
+  /* USER CODE END 5 */
 }
 
 /* TIM7 init function */
@@ -841,7 +851,7 @@ MX_TIM7_Init (void)
     {
       Error_Handler ();
     }
-
+  HAL_NVIC_EnableIRQ (TIM7_IRQn);
 }
 
 /* UART4 init function */

@@ -15,7 +15,7 @@ Wifi_data_update (void)
 {
   wifiFlags |= 1 << DATA_UPDATE;
   USER_UART_Recieve_STOP (&WIFI_UART);
-  HAL_TIM_Base_Stop_IT (&WIFI_TIMER);
+  HAL_TIM_Base_Stop (&WIFI_TIMER);
 }
 
 void

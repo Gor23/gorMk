@@ -145,7 +145,7 @@ typedef struct
 
   void (*rs485FlowControlFunction)();	  /*!< pointer on function to control flow control, set by user */
 
-  void (*resrtTimer)();						  /*!<pointer on function, which control packet recieve, set by user */
+  void (*resrtTimer)(uint8_t);						  /*!<pointer on function, which control packet recieve, set by user */
 
   /* USER CODE END 0 */
 
