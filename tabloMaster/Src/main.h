@@ -53,6 +53,8 @@ extern volatile uint16_t timerStopValue;
 extern volatile uint8_t ready;
 extern volatile uint8_t dmaSend;
 
+extern void void_function(uint8_t in);
+
 
 #endif /* MAIN_H_ */
 

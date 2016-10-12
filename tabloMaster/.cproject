@@ -99,8 +99,8 @@
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="refreshScope" versionNumber="2">
-		<configuration artifactName="tabloMaster" configurationName="Debug">
-			<resource resourceType="PROJECT" workspacePath="tabloMaster"/>
+		<configuration configurationName="Debug">
+			<resource resourceType="PROJECT" workspacePath="/tabloMaster"/>
 		</configuration>
 	</storageModule>
 </cproject>
