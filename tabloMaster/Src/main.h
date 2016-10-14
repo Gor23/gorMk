@@ -24,9 +24,10 @@
 #define TRANCIEVE_ARRAY_SIZE 	256*xMatrix*yMatrix
 #define RECIEVE_BUFFER_SIZE 	10
 
-#define TEXT_BUF_SIZE 1024
-#define COMM_TEXT_BUF_SIZE 256
-#define STRING_BUF_SIZE 512
+#define TEXT_BUF_SIZE 		1024
+#define COMM_TEXT_BUF_SIZE 	256
+#define SYSTEM_TEXT_BUF_SIZE	256
+#define STRING_BUF_SIZE 	512
 
 #define TIMER_1_STOP_VALUE	100
 #define TIMER_2_STOP_VALUE	200
@@ -52,9 +53,6 @@ extern volatile uint16_t driverTimer;
 extern volatile uint16_t timerStopValue;
 extern volatile uint8_t ready;
 extern volatile uint8_t dmaSend;
-
-extern void void_function(uint8_t in);
-
 
 #endif /* MAIN_H_ */
 
