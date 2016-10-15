@@ -48,7 +48,7 @@ typedef struct
 
 typedef struct
 {
-	uint32_t stringShift;
+	int32_t stringShift;
 	uint16_t visibleRightEdge;
 	uint16_t visibleDownEdge;
 	uint16_t xOffset;
@@ -83,13 +83,18 @@ typedef struct
 	uint8_t *command2Ptr;
 } scoreForm;
 
-
+enum processStatuses {
+	BUFFER_OVERFLOW, NOT_COMPLETE, COMPLETE
+};
 
 
 
 
 void Video_change_buffers (videoBuff *vbPtr, uint8_t *firstBuff, uint8_t *secondBuff);
 uint8_t Video_put_string (text *textStruct, const tChar *fonts, videoBuff *videoBuffPtr);
+void Video_move_string_left(text *textStruct, uint8_t step);
+void Video_move_string_right(text *textStruct, uint8_t step);
+uint8_t Video_put_n_move_string_left(text *textStruct, const tChar *fonts, uint8_t step, videoBuff *videoBuffPtr);
 void Video_put_image (image *imgPtr, videoBuff *videoBuffPtr);
 uint8_t *Video_put_string_fonts (uint8_t *text, const tChar *fonts, image *videoBuffPtr);
 void Video_put_and_move_string (uint8_t *text, const tChar *fonts, image *videoBuffPtr);

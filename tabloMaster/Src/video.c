@@ -254,8 +254,8 @@ uint8_t *Video_put_string_fonts (uint8_t *text, const tChar *fonts, image *video
 uint8_t Video_put_string (text *textStruct, const tChar *fonts, videoBuff *videoBuffPtr)
 {
 	uint32_t yOffsetInBits = textStruct->yOffset*videoBuffPtr->xLength;
-	uint32_t letterOffset = textStruct->xOffset+yOffsetInBits;
-	uint32_t temp = letterOffset;
+	int32_t letterOffset = textStruct->xOffset+yOffsetInBits+textStruct->stringShift;
+	int32_t temp = letterOffset;
 	uint16_t x = 0;
 	uint16_t y = 0;
 	uint16_t letter;
@@ -288,15 +288,18 @@ uint8_t Video_put_string (text *textStruct, const tChar *fonts, videoBuff *video
 			{
 				if (temp >= videoBuffPtr->size)
 				    {
-				    return 'E';
+				    return BUFFER_OVERFLOW;
 				    }
-				if (temp >= textStruct->visibleRightEdge+yOffsetInBits+videoBuffPtr->xLength*y)
+				if (temp >= (int32_t)(textStruct->visibleRightEdge+yOffsetInBits+videoBuffPtr->xLength*y))
 				    {
-				    temp++;
+				    //temp++;
 				    lastLetter = 1;
 				    break;
 				    }
-				videoBuffPtr->bufferArrayPtr[temp] = fonts[asciCode].image->arrayPointer[x+y*fonts[asciCode].image->width];
+				if (temp>=(int32_t)(textStruct->xOffset+videoBuffPtr->xLength*y))
+				    {
+				    videoBuffPtr->bufferArrayPtr[temp] = fonts[asciCode].image->arrayPointer[x+y*fonts[asciCode].image->width];
+				    }
 				temp++;
 			}
 			    temp = temp + videoBuffPtr->xLength-x;
@@ -304,13 +307,36 @@ uint8_t Video_put_string (text *textStruct, const tChar *fonts, videoBuff *video
 
 		if(lastLetter)
 		    {
-		    return 'F';
+		    return NOT_COMPLETE;
 		    }
 		letterOffset += (fonts[asciCode].image->width);
 		temp = letterOffset;
 	}
-	return 0;
+	return COMPLETE;
 }
+
+void Video_move_string_left(text *textStruct, uint8_t step)
+    {
+    textStruct->stringShift-=step;
+    }
+
+void Video_move_string_right(text *textStruct, uint8_t step)
+    {
+    textStruct->stringShift+=step;
+    }
+
+uint8_t Video_put_n_move_string_left(text *textStruct, const tChar *fonts, uint8_t step, videoBuff *videoBuffPtr)
+    {
+    Video_move_string_left(&textStruct, step);
+    if (Video_put_string(&textStruct, fonts, &videoBuffPtr)==COMPLETE)
+	{
+	return COMPLETE;
+	}
+    else
+	{
+	return NOT_COMPLETE;
+	}
+    }
 
 void Video_put_and_move_string (uint8_t *text, const tChar *fonts, image *videoBuffPtr)
 {
