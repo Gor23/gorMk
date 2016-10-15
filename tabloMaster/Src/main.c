@@ -263,7 +263,7 @@ int main(void)
     uint8_t scoreString[MAX_EVENT_STRING_SCORE_SIZE * 2];
     uint8_t teamsString [MAX_EVENT_STRING_SIZE * 2];
 
-    uint8_t imageMode = LOGO_MODE;
+    uint8_t imageMode = STRING_MODE;
     uint32_t ticks = 40;
 
     char *ptr_char0;
@@ -321,15 +321,6 @@ int main(void)
     textBuffer.yOffset = 0;
     textBuffer.imageArrayPtr = textBuff;
 
-    stringBuffer.xLength = 128;
-    stringBuffer.yLength = STRING_BUF_SIZE / stringBuffer.xLength;
-    stringBuffer.visibleLeftEdge = 0;
-    stringBuffer.visibleRightEdge = stringBuffer.xLength;
-    stringBuffer.size = STRING_BUF_SIZE;
-    stringBuffer.xOffset = 0;
-    stringBuffer.yOffset = 0;
-    stringBuffer.imageArrayPtr = stringBuff;
-
     commandTextBuffer.xLength = 128;
     commandTextBuffer.yLength = COMM_TEXT_BUF_SIZE / textBuffer.xLength;
     commandTextBuffer.visibleLeftEdge = 0;
@@ -355,11 +346,10 @@ int main(void)
     mainBuffer.readBufferArrayPointer = videoBufferSec;
     mainBuffer.writeFlag = 0;
 
-    testString.letterHight = 8;
-    testString.letterWidth = 5;
     testString.xOffset = 0;
     testString.yOffset = 0;
-    testString.stringPtr = "Риверсофт";
+    testString.stringPtr = "Кеша вредный попугай";
+    testString.visibleRightEdge = 128;
     ///////////////////////////
 
     memset(videoBuffer, 0x00, TRANCIEVE_ARRAY_SIZE);
@@ -599,20 +589,18 @@ int main(void)
 
 	    case STRING_MODE:
 		timerStopValue = 300;
-		Video_put_and_move_string((uint8_t*) "DISPLAY v1.0",
-			FontSmall_array, &stringBuffer);
-		Video_move_image(&stringBuffer, &mainBuffer, 0, 3);
-		Video_put_image(&stringBuffer, &mainBuffer);
+		Video_put_string(&testString, Font2_array, &mainBuffer);
+
 		/*xMove += 4;
 		 if (xMove == 128)
 		 xMove = 0;*/
-		ticks--;
-
-		if (!ticks)
-		    {
-		    imageMode = LOGO_MODE;
-		    ticks = 20;
-		    }
+//		ticks--;
+//
+//		if (!ticks)
+//		    {
+//		    imageMode = LOGO_MODE;
+//		    ticks = 20;
+//		    }
 		break;
 
 	    default:

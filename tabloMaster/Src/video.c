@@ -193,56 +193,75 @@ void Video_change_buffers (videoBuff *vbPtr, uint8_t *firstBuff, uint8_t *second
 	;
 }
 
-
-
-//void Video_put_string (text *textPtr, image *videoBuffPtr)
-//{
-//	uint32_t temp;
-//	uint16_t x = 0;
-//	uint16_t letter;
-//	uint8_t asciCode;
-//
-//	for (letter=0; letter<strlen((const char*)textPtr->stringPtr); letter++)
-//	{
-//		asciCode = textPtr->stringPtr[letter];
-//		if (asciCode > 0x7D)
-//		{
-//			asciCode -= RUS_ARRAY_OFFSRET;
-//		}
-//		asciCode -=  ARRAY_SYMBOLS_OFFSET;
-//		temp = (letter*(textPtr->letterWidth+SPACE_WIDTH))+textPtr->xOffset+textPtr->yOffset;
-//		for (x=0; x<textPtr->letterWidth + SPACE_WIDTH; x++)
-//		{
-//			if (temp < videoBuffPtr->size)
-//			{
-//				if (x<textPtr->letterWidth)
-//				{
-//					videoBuffPtr->imageArrayPtr[temp] = SmallFont[asciCode][x];
-//				}
-//				else
-//				{
-//					videoBuffPtr->imageArrayPtr[temp] = 0x00;
-//				}
-//			}
-//			else
-//			{
-//				return;
-//			}
-//			temp++;
-//		}
-//
-//	}
-//}
-
 uint8_t *Video_put_string_fonts (uint8_t *text, const tChar *fonts, image *videoBuffPtr)
 {
-	uint32_t temp = 0;
-	uint32_t letterOffset = 0;
+//	uint32_t temp = 0;
+//	uint32_t letterOffset = 0;
+//	uint16_t x = 0;
+//	uint16_t y = 0;
+//	uint16_t letter;
+//	uint8_t asciCode = 0;
+//	uint8_t hieghtInBytes = 0;
+//
+//	if (fonts[asciCode].image->height%8)
+//	{
+//		hieghtInBytes = fonts[asciCode].image->height/8+1;
+//	}
+//	else
+//	{
+//		hieghtInBytes = fonts[asciCode].image->height/8;
+//	}
+//
+//	for (letter=0; letter<strlen((char*)text); letter++)
+//	{
+//		asciCode = text[letter];
+//		if (asciCode > 0x7D)
+//		{
+//			//asciCode -= RUS_ARRAY_OFFSRET;
+//			asciCode -= 1;
+//		}
+//		asciCode -=  ARRAY_SYMBOLS_OFFSET;
+//
+//
+//		if(temp+fonts[asciCode].image->width>textstruct->visibleRightEdge)
+//		{
+//			text++;
+//			return text;
+//		}
+//		for (y=0; y<hieghtInBytes; y++)
+//		{
+//			for (x=0; x<fonts[asciCode].image->width; x++)
+//			{
+//				//if (temp < videoBuffPtr->xLength*(y+1))
+//				//{
+//					videoBuffPtr->bufferArrayPtr[temp] = fonts[asciCode].image->arrayPointer[x+y*fonts[asciCode].image->width];
+//				//}
+//				/*else
+//				{
+//					return letter-1;
+//				}*/
+//				temp++;
+//			}
+//			temp = temp + videoBuffPtr->xLength-fonts[asciCode].image->width;
+//		}
+//
+//		letterOffset += (fonts[asciCode].image->width);
+//		temp = letterOffset;
+//	}
+//	return 0;
+}
+
+uint8_t Video_put_string (text *textStruct, const tChar *fonts, videoBuff *videoBuffPtr)
+{
+	uint32_t yOffsetInBits = textStruct->yOffset*videoBuffPtr->xLength;
+	uint32_t letterOffset = textStruct->xOffset+yOffsetInBits;
+	uint32_t temp = letterOffset;
 	uint16_t x = 0;
 	uint16_t y = 0;
 	uint16_t letter;
 	uint8_t asciCode = 0;
 	uint8_t hieghtInBytes = 0;
+	uint8_t lastLetter = 0;
 
 	if (fonts[asciCode].image->height%8)
 	{
@@ -253,9 +272,9 @@ uint8_t *Video_put_string_fonts (uint8_t *text, const tChar *fonts, image *video
 		hieghtInBytes = fonts[asciCode].image->height/8;
 	}
 
-	for (letter=0; letter<strlen((char*)text); letter++)
+	for (letter=0; letter<strlen((char*)textStruct->stringPtr); letter++)
 	{
-		asciCode = text[letter];
+		asciCode = textStruct->stringPtr[letter];
 		if (asciCode > 0x7D)
 		{
 			//asciCode -= RUS_ARRAY_OFFSRET;
@@ -263,29 +282,30 @@ uint8_t *Video_put_string_fonts (uint8_t *text, const tChar *fonts, image *video
 		}
 		asciCode -=  ARRAY_SYMBOLS_OFFSET;
 
-
-		if(temp+fonts[asciCode].image->width>videoBuffPtr->visibleRightEdge)
-		{
-			text++;
-			return text;
-		}
 		for (y=0; y<hieghtInBytes; y++)
 		{
 			for (x=0; x<fonts[asciCode].image->width; x++)
 			{
-				//if (temp < videoBuffPtr->xLength*(y+1))
-				//{
-					videoBuffPtr->imageArrayPtr[temp] = fonts[asciCode].image->arrayPointer[x+y*fonts[asciCode].image->width];
-				//}
-				/*else
-				{
-					return letter-1;
-				}*/
+				if (temp >= videoBuffPtr->size)
+				    {
+				    return 'E';
+				    }
+				if (temp >= textStruct->visibleRightEdge+yOffsetInBits+videoBuffPtr->xLength*y)
+				    {
+				    temp++;
+				    lastLetter = 1;
+				    break;
+				    }
+				videoBuffPtr->bufferArrayPtr[temp] = fonts[asciCode].image->arrayPointer[x+y*fonts[asciCode].image->width];
 				temp++;
 			}
-			temp = temp + videoBuffPtr->xLength-fonts[asciCode].image->width;
+			    temp = temp + videoBuffPtr->xLength-x;
 		}
 
+		if(lastLetter)
+		    {
+		    return 'F';
+		    }
 		letterOffset += (fonts[asciCode].image->width);
 		temp = letterOffset;
 	}
@@ -294,17 +314,17 @@ uint8_t *Video_put_string_fonts (uint8_t *text, const tChar *fonts, image *video
 
 void Video_put_and_move_string (uint8_t *text, const tChar *fonts, image *videoBuffPtr)
 {
-	static uint8_t *subStringPtr;
-
-	 memset (videoBuffPtr->imageArrayPtr, 0x00, videoBuffPtr->size);
-	 if (subStringPtr)
-	 {
-	 	subStringPtr = Video_put_string_fonts(subStringPtr, fonts, videoBuffPtr);
-	 }
-	 else
-	 {
-	 	subStringPtr = Video_put_string_fonts(text, fonts, videoBuffPtr);
-	 }
+//	static uint8_t *subStringPtr;
+//
+//	 memset (videoBuffPtr->imageArrayPtr, 0x00, videoBuffPtr->size);
+//	 if (subStringPtr)
+//	 {
+//	 	subStringPtr = Video_put_string_fonts(subStringPtr, fonts, videoBuffPtr);
+//	 }
+//	 else
+//	 {
+//	 	subStringPtr = Video_put_string_fonts(text, fonts, videoBuffPtr);
+//	 }
 }
 
 

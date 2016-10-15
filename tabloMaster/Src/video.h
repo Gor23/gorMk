@@ -21,7 +21,7 @@
 
 //extern static const tChar Font_array[];
 
-
+//don`t change!!!!!!!!!!!!!!!!!!
 typedef struct
 {
    uint16_t size;
@@ -48,12 +48,11 @@ typedef struct
 
 typedef struct
 {
-	uint16_t xMicroOffset;
-	uint16_t yMicroOffset;
+	uint32_t stringShift;
+	uint16_t visibleRightEdge;
+	uint16_t visibleDownEdge;
 	uint16_t xOffset;
 	uint16_t yOffset;
-	uint8_t letterHight;
-	uint8_t letterWidth;
 	uint8_t *stringPtr;
 } text;
 
@@ -90,7 +89,7 @@ typedef struct
 
 
 void Video_change_buffers (videoBuff *vbPtr, uint8_t *firstBuff, uint8_t *secondBuff);
-void Video_put_string (text *textPtr, image *videoBuffPtr);
+uint8_t Video_put_string (text *textStruct, const tChar *fonts, videoBuff *videoBuffPtr);
 void Video_put_image (image *imgPtr, videoBuff *videoBuffPtr);
 uint8_t *Video_put_string_fonts (uint8_t *text, const tChar *fonts, image *videoBuffPtr);
 void Video_put_and_move_string (uint8_t *text, const tChar *fonts, image *videoBuffPtr);
