@@ -296,11 +296,12 @@ uint8_t Video_put_string (text *textStruct, const tChar *fonts, videoBuff *video
 				    lastLetter = 1;
 				    break;
 				    }
-				if (temp>=(int32_t)(textStruct->xOffset+videoBuffPtr->xLength*y))
+				if (temp<(int32_t)(textStruct->xOffset+videoBuffPtr->xLength*(y+textStruct->yOffset)))
 				    {
-				    videoBuffPtr->bufferArrayPtr[temp] = fonts[asciCode].image->arrayPointer[x+y*fonts[asciCode].image->width];
+				    break;
 				    }
-				temp++;
+				    videoBuffPtr->bufferArrayPtr[temp] = fonts[asciCode].image->arrayPointer[x+y*fonts[asciCode].image->width];
+				    temp++;
 			}
 			    temp = temp + videoBuffPtr->xLength-x;
 		}

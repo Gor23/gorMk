@@ -30,6 +30,7 @@ extern const uint8_t imagesWinner[];
 extern imageGif goalGif;
 extern imageGif logoGif;
 extern imageGif goalGifStruct;
+extern imageGif pointGifStruct;
 
 
 #endif /* IMAGES_H_ */

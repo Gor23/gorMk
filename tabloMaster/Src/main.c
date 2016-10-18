@@ -138,39 +138,32 @@ int main(void)
     MX_USART2_UART_Init();
     MX_TIM6_Init();
 //  MX_TIM7_Init();
-    uint8_t yPosition = 0;
-    uint8_t frame = 0;
+
     uint8_t init_array[] =
 	{
 	'I', 'N', xMatrix, yMatrix, '\n'
 	};
-    uint32_t xMove = 0;
 
-    image ballImage;
-    image textBuffer;
-    image stringBuffer;
-    image commandTextBuffer;
-    image systemMessageBuffer;
+
     videoBuff mainBuffer;
     text testString;
     text logoString;
+    text score;
+    text teams;
+    text string;
     scoreForm footballForm;
-    imageGif goalGif;
     imageGif logoGif;
     imageGif winerGif;
 
     uint8_t uartRecieveBuffer[64];
     uint8_t videoBuffer[TRANCIEVE_ARRAY_SIZE];
     uint8_t videoBufferSec[TRANCIEVE_ARRAY_SIZE];
-    uint8_t textBuff[TEXT_BUF_SIZE];
-    uint8_t commandTextBuff[COMM_TEXT_BUF_SIZE];
     uint8_t systemMesageBuff[SYSTEM_TEXT_BUF_SIZE];
     uint8_t stringBuff[STRING_BUF_SIZE];
-    uint8_t *subStringPtr = 0;
     uint8_t scoreString[MAX_EVENT_STRING_SCORE_SIZE * 2];
     uint8_t teamsString [MAX_EVENT_STRING_SIZE * 2];
 
-    uint8_t imageMode = LOGO_MODE;
+    uint8_t imageMode = POINT_MODE;
     uint32_t ticks = 40;
 
     char *ptr_char0;
@@ -178,17 +171,6 @@ int main(void)
 
     ///////////////////// set buffer an images properties
     //footballForm.formImage
-
-    goalGif.frames = 14;
-    goalGif.frameSize = 1024;
-    goalGif.imageArrayPtr = goal;
-    goalGif.xLength = 128;
-    goalGif.xOffset = 0;
-    goalGif.yLength = 8;
-    goalGif.yOffset = 0;
-    goalGif.currentFrame = 0;
-    goalGif.repeats = 20;
-    goalGif.repeatsFrom = 12;
 
     logoGif.frames = 4;
     logoGif.frameSize = 1024;
@@ -212,33 +194,6 @@ int main(void)
     winerGif.repeats = 0;
     winerGif.repeatsFrom = 0;
 
-    textBuffer.xLength = 128;
-    textBuffer.yLength = TEXT_BUF_SIZE / textBuffer.xLength;
-    textBuffer.visibleLeftEdge = 0;
-    textBuffer.visibleRightEdge = textBuffer.xLength;
-    textBuffer.size = TEXT_BUF_SIZE;
-    textBuffer.xOffset = 0;
-    textBuffer.yOffset = 0;
-    textBuffer.imageArrayPtr = textBuff;
-
-    commandTextBuffer.xLength = 128;
-    commandTextBuffer.yLength = COMM_TEXT_BUF_SIZE / textBuffer.xLength;
-    commandTextBuffer.visibleLeftEdge = 0;
-    commandTextBuffer.visibleRightEdge = commandTextBuffer.xLength;
-    commandTextBuffer.size = COMM_TEXT_BUF_SIZE;
-    commandTextBuffer.xOffset = 0;
-    commandTextBuffer.yOffset = 0;
-    commandTextBuffer.imageArrayPtr = commandTextBuff;
-
-    systemMessageBuffer.xLength = 64;
-    systemMessageBuffer.yLength = SYSTEM_TEXT_BUF_SIZE / textBuffer.xLength;
-    systemMessageBuffer.visibleLeftEdge = 0;
-    systemMessageBuffer.visibleRightEdge = commandTextBuffer.xLength;
-    systemMessageBuffer.size = SYSTEM_TEXT_BUF_SIZE;
-    systemMessageBuffer.xOffset = 64;
-    systemMessageBuffer.yOffset = 128;
-    systemMessageBuffer.imageArrayPtr = systemMesageBuff;
-
     mainBuffer.xLength = xMatrix * 64;
     mainBuffer.yLength = TRANCIEVE_ARRAY_SIZE / mainBuffer.xLength;
     mainBuffer.size = TRANCIEVE_ARRAY_SIZE;
@@ -248,8 +203,8 @@ int main(void)
 
     testString.xOffset = 0;
     testString.yOffset = 1;
-    testString.stringPtr = "EVENTS";
-//    testString.stringPtr = "WWW.EVENTSION.COM // EVENTSION SITE";
+   // testString.stringPtr = "EVENTS";
+    testString.stringPtr = "WWW.EVENTSSION.COM // WWW.EVENTSSION.COM";
     testString.stringShift = 0;
     testString.visibleRightEdge = 128;
 
@@ -258,10 +213,22 @@ int main(void)
     logoString.stringPtr = &eventData.eventMessage;
     logoString.stringShift = 0;
     logoString.visibleRightEdge = 128;
+
+    teams.xOffset = 0;
+    teams.yOffset = 6;
+    teams.stringPtr = teamsString;
+    teams.stringShift = 0;
+    teams.visibleRightEdge = 128;
+
+    score.xOffset = 18;
+    score.yOffset = 0;
+    score.stringPtr = scoreString;
+    score.stringShift = 0;
+    score.visibleRightEdge = 128;
+
     ///////////////////////////
 
     memset(videoBuffer, 0x00, TRANCIEVE_ARRAY_SIZE);
-    memset(textBuff, 0x00, TEXT_BUF_SIZE);
     memset(stringBuff, 0x00, STRING_BUF_SIZE);
     memset(uartRecieveBuffer, 0x00, sizeof(uartRecieveBuffer));
     memset(videoBufferSec, 0x00, TRANCIEVE_ARRAY_SIZE);
@@ -449,6 +416,15 @@ int main(void)
 		    }
 		break;
 
+	    case POINT_MODE:
+		timerStopValue = 70;
+		if (Video_put_gif(&pointGifStruct, &mainBuffer, true) == 'S')
+		    {
+		    imageMode = SCORE_MODE;
+		    ticks = 20;
+		    }
+		break;
+
 	    case SCORE_MODE:
 		timerStopValue = 400;
 		memset(scoreString, 0x00, MAX_EVENT_STRING_SCORE_SIZE * 2);
@@ -462,20 +438,14 @@ int main(void)
 		sprintf((char*) scoreString, "%s:%s",
 						(char*) &gameData.firstTeamScore,
 						(char*) &gameData.secondTeamScore);
-		Video_put_string_fonts((uint8_t*)scoreString, Font2_array,
-			&textBuffer);
+		Video_put_string(&score, Font2_array, &mainBuffer);
 
 		sprintf((char*) teamsString, "%s - %s",
 					(char*) &gameData.firstTeam,
 					(char*) &gameData.secondTeam);
 
-		Video_put_and_move_string((uint8_t*) teamsString,
-			FontSmall_array, &commandTextBuffer);
+		Video_put_string(&teams, Font_array, &mainBuffer);
 
-		Video_move_image(&textBuffer, &mainBuffer, 18, 0);
-		Video_move_image(&commandTextBuffer, &mainBuffer, 0, 6);
-		Video_put_image(&textBuffer, &mainBuffer);
-		Video_put_image(&commandTextBuffer, &mainBuffer);
 		ticks--;
 
 		if (!ticks)
@@ -491,18 +461,22 @@ int main(void)
 		Video_put_gif(&winerGif, &mainBuffer, true);
 		if (!ticks)
 		    {
-		    imageMode = STRING_MODE;
+		    imageMode = LOGO_MODE;
 		    ticks = 100;
 		    }
 		break;
 
 	    case STRING_MODE:
-		timerStopValue = 1000;
-		if (Video_put_string(&testString, Font_array, &mainBuffer)==COMPLETE)
+		timerStopValue = 50;
+		if (Video_put_string(&testString, Font2_array, &mainBuffer)==COMPLETE)
 		    {
 		    testString.stringShift = 0;
+		    imageMode = LOGO_MODE;
 		    }
-		Video_move_string_left(&testString, 2);
+		else
+		    {
+		    Video_move_string_left(&testString, 2);
+		    }
 
 
 		/*xMove += 4;
@@ -532,6 +506,18 @@ int main(void)
 	    if (strstr((char*)&eventData.eventType, "FOOTBALL"))
 		{
 		imageMode = GOAL_MODE;
+		}
+	    if (strstr((char*)&eventData.eventType, "TENNIS"))
+		{
+		imageMode = GOAL_MODE;
+		}
+	    if (strstr((char*)&gameData.actionType, "WINNER"))
+		{
+		imageMode = WINNER_MODE;
+		}
+	    if (strstr((char*)&gameData.actionType, "MESSAGE"))
+		{
+		imageMode = STRING_MODE;
 		}
 
 	    }
