@@ -280,11 +280,6 @@ int main(void)
 //		{
 //		  driverTimer = 0;
 //		}
-//	      //////////////////
-////		  		  HAL_UART_Transmit_IT(&huart2, (uint8_t*)"BUFC\n", strlen("BUFC\n"));
-////		  		  videoDriverStatus = SEND_DATA;
-////		  		  driverTimer = 10;
-//	      /////////////////
 //	      break;
 //
 //	    case ANSWER_CHECK:
@@ -315,20 +310,25 @@ int main(void)
 //					 TRANCIEVE_ARRAY_SIZE) == HAL_OK)
 //		{
 //		  ready = 1;
+//		  dmaSend = 1;
 //		  videoDriverStatus = WAIT_FOR_DATA_IS_SEND;
 //		}
 //	      driverTimer = 0;
 //	      break;
 //
 //	    case WAIT_FOR_DATA_IS_SEND:
-//	      if (dmaSend)
+//	      if (!dmaSend)
 //		{
-//		  ready = 0;
-//		  dmaSend = 0;
+//		ready = 0;
+//		videoDriverStatus = WAIT_FOR_DATA_READY;
 //		}
+//	      driverTimer = 0;
+//	      break;
+//
+//	    case WAIT_FOR_DATA_READY:
 //	      if (ready)
 //		{
-//		  videoDriverStatus = CHANGE_BUFER;
+//		videoDriverStatus = CHANGE_BUFER;
 //		}
 //	      driverTimer = 0;
 //	      break;
@@ -348,7 +348,6 @@ int main(void)
 	    uart4_trancieve();
 	    HAL_UART_Transmit_DMA(&huart4, (uint8_t*) "BUFC\n",
 		    strlen("BUFC\n"));
-//		 USER_UART_enable_RX_IT (&huart2);
 	    HAL_Delay(4);
 	    while (!ptr)
 		{
