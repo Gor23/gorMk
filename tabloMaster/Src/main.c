@@ -163,7 +163,7 @@ int main(void)
     uint8_t scoreString[MAX_EVENT_STRING_SCORE_SIZE * 2];
     uint8_t teamsString [MAX_EVENT_STRING_SIZE * 2];
 
-    uint8_t imageMode = POINT_MODE;
+    uint8_t imageMode = LOGO_MODE;
     uint32_t ticks = 40;
 
     char *ptr_char0;
@@ -509,13 +509,13 @@ int main(void)
 		}
 	    if (strstr((char*)&eventData.eventType, "TENNIS"))
 		{
-		imageMode = GOAL_MODE;
+		imageMode = POINT_MODE;
 		}
 	    if (strstr((char*)&gameData.actionType, "WINNER"))
 		{
 		imageMode = WINNER_MODE;
 		}
-	    if (strstr((char*)&gameData.actionType, "MESSAGE"))
+	    if (strstr((char*)&eventData.eventType, "MESSAGE"))
 		{
 		imageMode = STRING_MODE;
 		}

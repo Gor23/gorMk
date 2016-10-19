@@ -476,7 +476,8 @@ uint8_t Video_put_gif (imageGif *imgPtr, videoBuff *videoBuffPtr, uint8_t invert
 		return 'R';
 	}
 }
- Video_put_form (scoreForm *formPtr, videoBuff *videoBuffPtr)
+
+ void Video_align_text_to_center_by_symbol (scoreForm *formPtr, videoBuff *videoBuffPtr)
  {
 
  }

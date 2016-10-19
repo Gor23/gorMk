@@ -63,7 +63,7 @@ void Wifi_parser(void)
     Events_clear_strings_event_data();
     Wifi_null_removing();
 
-    if (Wifi_parser_get_value("TYPE", MAX_EVENT_STRING_SIZE,
+    if (Wifi_parser_get_value("type", MAX_EVENT_STRING_SIZE,
 	    (char*) &eventData.eventType))
 	{
 	Wifi_parser_get_value(firstTeamName, MAX_EVENT_STRING_SIZE,
