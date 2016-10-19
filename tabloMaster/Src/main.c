@@ -349,7 +349,7 @@ int main(void)
 	    HAL_UART_Transmit_DMA(&huart4, (uint8_t*) "BUFC\n",
 		    strlen("BUFC\n"));
 //		 USER_UART_enable_RX_IT (&huart2);
-	    HAL_Delay(3);
+	    HAL_Delay(4);
 	    while (!ptr)
 		{
 		ptr = strstr((char*) uartRecieveBuffer, "0123");
@@ -380,31 +380,14 @@ int main(void)
 	    memset(videoBuffer, 0x00, TRANCIEVE_ARRAY_SIZE);
 	    switch (imageMode)
 		{
-//	    case TEST_MODE:
-//	      timerStopValue = 300;
-//	      Video_put_image (&ballImage, &mainBuffer);
-//	      break;
 
 	    case LOGO_MODE:
 		memset(systemMesageBuff, 0x00, SYSTEM_TEXT_BUF_SIZE);
-
-		//test
-//		sprintf ((char*)&eventData.eventMessage, "%s", "BAD-CONN");
-
 		timerStopValue = 250;
 		Video_put_gif(&logoGif, &mainBuffer, false);
 
 		Video_put_string(&logoString, Font_array, &mainBuffer);
-//		Video_put_and_move_string((uint8_t*) &eventData.eventMessage,
-//			FontSmall_array, &systemMessageBuffer);
-//		Video_put_image(&systemMessageBuffer, &mainBuffer);
 
-//		ticks--;
-//		if (!ticks)
-//		    {
-//		    imageMode = GOAL_MODE;
-//		    ticks = 80;
-//		    }
 		break;
 
 	    case GOAL_MODE:
@@ -429,12 +412,6 @@ int main(void)
 		timerStopValue = 400;
 		memset(scoreString, 0x00, MAX_EVENT_STRING_SCORE_SIZE * 2);
 		memset(teamsString, 0x00, MAX_EVENT_STRING_SIZE * 2);
-//test
-//		sprintf ((char*)&gameData.firstTeamScore, "%s", "3");
-//		sprintf ((char*)&gameData.secondTeamScore, "%s", "2");
-//		sprintf ((char*)&gameData.firstTeam, "%s", "BADCONN");
-//		sprintf ((char*)&gameData.secondTeam, "%s", "BADCONN");
-
 		sprintf((char*) scoreString, "%s:%s",
 						(char*) &gameData.firstTeamScore,
 						(char*) &gameData.secondTeamScore);
@@ -478,17 +455,6 @@ int main(void)
 		    Video_move_string_left(&testString, 2);
 		    }
 
-
-		/*xMove += 4;
-		 if (xMove == 128)
-		 xMove = 0;*/
-//		ticks--;
-//
-//		if (!ticks)
-//		    {
-//		    imageMode = LOGO_MODE;
-//		    ticks = 20;
-//		    }
 		break;
 
 	    default:
