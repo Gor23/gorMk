@@ -260,7 +260,7 @@ int main(void)
 //	  switch (videoDriverStatus)
 //	    {
 //	    case INIT:
-//	      if (HAL_UART_Transmit_IT (&huart2, (uint8_t*) &init_array,
+//	      if (HAL_UART_Transmit_DMA (&huart4, (uint8_t*) &init_array,
 //					sizeof(init_array)) == HAL_OK)
 //		{
 //		  videoDriverStatus = CHANGE_BUFER;
@@ -269,12 +269,12 @@ int main(void)
 //	      break;
 //
 //	    case CHANGE_BUFER:
-//	      if (HAL_UART_Transmit_DMA (&huart2, (uint8_t*) "BUFC\n",
+//	      if (HAL_UART_Transmit_DMA (&huart4, (uint8_t*) "BUFC\n",
 //					 strlen ("BUFC\n")) == HAL_OK)
 //		{
 //		  videoDriverStatus = ANSWER_CHECK;
 //		  //videoDriverStatus = SEND_DATA;
-//		  driverTimer = 3;
+//		  driverTimer = 10;
 //		}
 //	      else
 //		{
@@ -283,7 +283,7 @@ int main(void)
 //	      break;
 //
 //	    case ANSWER_CHECK:
-//	      if (strstr ((char*) uartRecieveBuffer, "0123"))
+//	      if (strstr((char*) uartRecieveBuffer, "0123"))
 //		{
 //		  USER_UART_Clear_Recieve_Buffer (&huart4,
 //						  sizeof(uartRecieveBuffer));
@@ -306,7 +306,7 @@ int main(void)
 //	      break;
 //
 //	    case SEND_DATA:
-//	      if (HAL_UART_Transmit_DMA (&huart2, (uint8_t*) &videoBuffer,
+//	      if (HAL_UART_Transmit_DMA (&huart4, (uint8_t*) &videoBuffer,
 //					 TRANCIEVE_ARRAY_SIZE) == HAL_OK)
 //		{
 //		  ready = 1;
@@ -422,13 +422,13 @@ int main(void)
 
 		Video_put_string(&teams, Font_array, &mainBuffer);
 
-		ticks--;
-
-		if (!ticks)
-		    {
-		    imageMode = LOGO_MODE;
-		    ticks = 80;
-		    }
+//		ticks--;
+//
+//		if (!ticks)
+//		    {
+//		    imageMode = LOGO_MODE;
+//		    ticks = 80;
+//		    }
 		break;
 
 	    case WINNER_MODE:
@@ -470,11 +470,25 @@ int main(void)
 
 	    if (strstr((char*)&eventData.eventType, "FOOTBALL"))
 		{
-		imageMode = GOAL_MODE;
+		if(strstr((char*)&gameData.actionType, "GOAL"))
+		    {
+		    imageMode = GOAL_MODE;
+		    }
+		if(strstr((char*)&gameData.actionType, "UPDATE"))
+		    {
+		    imageMode = SCORE_MODE;
+		    }
 		}
 	    if (strstr((char*)&eventData.eventType, "TENNIS"))
 		{
-		imageMode = POINT_MODE;
+		if(strstr((char*)&gameData.actionType, "POINT"))
+		    {
+		    imageMode = POINT_MODE;
+		    }
+		if(strstr((char*)&gameData.actionType, "UPDATE"))
+		    {
+		    imageMode = SCORE_MODE;
+		    }
 		}
 	    if (strstr((char*)&gameData.actionType, "WINNER"))
 		{
