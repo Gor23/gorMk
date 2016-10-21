@@ -27,4 +27,6 @@ void Events_clear_strings_event_data(void)
     memset(&eventData.eventType, 0, MAX_EVENT_STRING_SIZE);
     }
 
+//void Events_put_commands_names()
+
 

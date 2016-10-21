@@ -433,12 +433,27 @@ int main(void)
 
 	    case WINNER_MODE:
 		timerStopValue = 20;
-		ticks--;
+
 		Video_put_gif(&winerGif, &mainBuffer, true);
+
+		///clear down row////////
+#define START_POSITION	896
+#define END_POSITION	1024
+		for(uint16_t i = 0; i<END_POSITION; i++)
+		    {
+		    mainBuffer.bufferArrayPtr[i+START_POSITION] = 0;
+		    }
+		sprintf((char*) teamsString, "%s:%s",
+								(char*) &gameData.firstTeam,
+								(char*) &gameData.firstTeamScore);
+
+		Video_put_string(&teams, Font_array, &mainBuffer);
+
+		ticks--;
 		if (!ticks)
 		    {
 		    imageMode = LOGO_MODE;
-		    ticks = 100;
+		    ticks = 500;
 		    }
 		break;
 

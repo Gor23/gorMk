@@ -29,6 +29,9 @@ const char secondTeamScore[] = "score_second";
 const char additionalFirstTeamScore[] = "winPeriodFirst";
 const char additionalSecondTeamScore[] = "winPeriodSecond";
 const char actionType[] = "action_type";
+const char winnerTeamName[] = "team_name";
+const char score[] = "score";
+
 
 char wifiRecieveBuffer[WIFI_RECIEVE_ARRAY_SIZE] = {0};
 
@@ -66,20 +69,30 @@ void Wifi_parser(void)
     if (Wifi_parser_get_value("type", MAX_EVENT_STRING_SIZE,
 	    (char*) &eventData.eventType))
 	{
-	Wifi_parser_get_value(firstTeamName, MAX_EVENT_STRING_SIZE,
-		(char*) &gameData.firstTeam);
-	Wifi_parser_get_value(secondTeamName, MAX_EVENT_STRING_SIZE,
-		(char*) &gameData.secondTeam);
-	Wifi_parser_get_value(firstTeamScore, MAX_EVENT_STRING_SIZE,
-		(char*) &gameData.firstTeamScore);
-	Wifi_parser_get_value(secondTeamScore, MAX_EVENT_STRING_SIZE,
-		(char*) &gameData.secondTeamScore);
-	Wifi_parser_get_value(additionalFirstTeamScore, MAX_EVENT_STRING_SIZE,
-		(char*) &gameData.additionalFirstTeamScore);
-	Wifi_parser_get_value(additionalSecondTeamScore, MAX_EVENT_STRING_SIZE,
-		(char*) &gameData.additionalSecondTeamScore);
 	Wifi_parser_get_value(actionType, MAX_EVENT_STRING_SIZE,
 		(char*) &gameData.actionType);
+	if (strstr((char*)&gameData.actionType, "WINNER"))
+	    {
+		Wifi_parser_get_value(winnerTeamName, MAX_EVENT_STRING_SIZE,
+			(char*) &gameData.firstTeam);
+		Wifi_parser_get_value(score, MAX_EVENT_STRING_SIZE,
+			(char*) &gameData.firstTeamScore);
+	    }
+	else
+	    {
+		Wifi_parser_get_value(firstTeamName, MAX_EVENT_STRING_SIZE,
+			(char*) &gameData.firstTeam);
+		Wifi_parser_get_value(secondTeamName, MAX_EVENT_STRING_SIZE,
+			(char*) &gameData.secondTeam);
+		Wifi_parser_get_value(firstTeamScore, MAX_EVENT_STRING_SIZE,
+			(char*) &gameData.firstTeamScore);
+		Wifi_parser_get_value(secondTeamScore, MAX_EVENT_STRING_SIZE,
+			(char*) &gameData.secondTeamScore);
+		Wifi_parser_get_value(additionalFirstTeamScore, MAX_EVENT_STRING_SIZE,
+			(char*) &gameData.additionalFirstTeamScore);
+		Wifi_parser_get_value(additionalSecondTeamScore, MAX_EVENT_STRING_SIZE,
+			(char*) &gameData.additionalSecondTeamScore);
+	    }
 	}
 
     else
