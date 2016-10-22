@@ -19,7 +19,6 @@
 #include "fonts.h"
 #include "images.h"
 
-//extern static const tChar Font_array[];
 
 //don`t change!!!!!!!!!!!!!!!!!!
 typedef struct
@@ -50,6 +49,7 @@ typedef struct
 {
 	int32_t stringShift;
 	uint16_t visibleRightEdge;
+	uint16_t visibleLeftEdge;
 	uint16_t visibleDownEdge;
 	uint16_t xOffset;
 	uint16_t yOffset;
@@ -65,23 +65,6 @@ typedef struct
 	uint16_t yOffset;
 	uint8_t *stringPtr;
 } textBuff;
-
-typedef struct
-{
-	//image formImage;
-	uint16_t score1XOffset;
-	uint16_t scoreYOffset;
-	uint16_t score2XOffset;
-	uint16_t command1XOffset;;
-	uint16_t command2XOffset;
-	uint16_t commandyOffset;
-	const tChar *commandsFont;
-	const tChar *scoreFont;
-	uint8_t *score1Ptr;
-	uint8_t *score2Ptr;
-	uint8_t *command1Ptr;
-	uint8_t *command2Ptr;
-} scoreForm;
 
 enum processStatuses {
 	BUFFER_OVERFLOW, NOT_COMPLETE, COMPLETE

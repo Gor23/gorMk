@@ -19,7 +19,8 @@
 #define xMatrix	2
 #define yMatrix 2
 
-
+#define X_PIXELS 	64*yMatrix
+#define Y_PIXELS	32*yMatrix
 
 #define TRANCIEVE_ARRAY_SIZE 	256*xMatrix*yMatrix
 #define RECIEVE_BUFFER_SIZE 	10

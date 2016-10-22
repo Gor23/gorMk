@@ -193,64 +193,6 @@ void Video_change_buffers (videoBuff *vbPtr, uint8_t *firstBuff, uint8_t *second
 	;
 }
 
-uint8_t *Video_put_string_fonts (uint8_t *text, const tChar *fonts, image *videoBuffPtr)
-{
-//	uint32_t temp = 0;
-//	uint32_t letterOffset = 0;
-//	uint16_t x = 0;
-//	uint16_t y = 0;
-//	uint16_t letter;
-//	uint8_t asciCode = 0;
-//	uint8_t hieghtInBytes = 0;
-//
-//	if (fonts[asciCode].image->height%8)
-//	{
-//		hieghtInBytes = fonts[asciCode].image->height/8+1;
-//	}
-//	else
-//	{
-//		hieghtInBytes = fonts[asciCode].image->height/8;
-//	}
-//
-//	for (letter=0; letter<strlen((char*)text); letter++)
-//	{
-//		asciCode = text[letter];
-//		if (asciCode > 0x7D)
-//		{
-//			//asciCode -= RUS_ARRAY_OFFSRET;
-//			asciCode -= 1;
-//		}
-//		asciCode -=  ARRAY_SYMBOLS_OFFSET;
-//
-//
-//		if(temp+fonts[asciCode].image->width>textstruct->visibleRightEdge)
-//		{
-//			text++;
-//			return text;
-//		}
-//		for (y=0; y<hieghtInBytes; y++)
-//		{
-//			for (x=0; x<fonts[asciCode].image->width; x++)
-//			{
-//				//if (temp < videoBuffPtr->xLength*(y+1))
-//				//{
-//					videoBuffPtr->bufferArrayPtr[temp] = fonts[asciCode].image->arrayPointer[x+y*fonts[asciCode].image->width];
-//				//}
-//				/*else
-//				{
-//					return letter-1;
-//				}*/
-//				temp++;
-//			}
-//			temp = temp + videoBuffPtr->xLength-fonts[asciCode].image->width;
-//		}
-//
-//		letterOffset += (fonts[asciCode].image->width);
-//		temp = letterOffset;
-//	}
-//	return 0;
-}
-
 uint8_t Video_put_string (text *textStruct, const tChar *fonts, videoBuff *videoBuffPtr)
 {
 	uint32_t yOffsetInBits = textStruct->yOffset*videoBuffPtr->xLength;
@@ -476,10 +418,4 @@ uint8_t Video_put_gif (imageGif *imgPtr, videoBuff *videoBuffPtr, uint8_t invert
 		return 'R';
 	}
 }
-
- void Video_align_text_to_center_by_symbol (scoreForm *formPtr, videoBuff *videoBuffPtr)
- {
-
- }
-
 

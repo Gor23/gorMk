@@ -151,7 +151,6 @@ int main(void)
     text score;
     text teams;
     text string;
-    scoreForm footballForm;
     imageGif logoGif;
     imageGif winerGif;
 
