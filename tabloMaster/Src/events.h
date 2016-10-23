@@ -36,23 +36,7 @@ typedef struct
 
     } EventData;
 
-typedef struct
-    {
-	text firsTeamName;
-	text secondTeamName;
-	text teamDevider;
-	text firstTeamScore;
-	text secondTeamScore;
-	text scoreDevider;
-	text firstTeamAdditional;
-	text secondTeamAdditional;
-    } ScoreForm;
 
-typedef enum
-    {
-    SIMPLE_FORM,
-    EXTENDED_FORM
-    } FormType;
 
 GameData gameData;
 EventData eventData;
