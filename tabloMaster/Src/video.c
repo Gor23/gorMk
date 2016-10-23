@@ -322,6 +322,12 @@ void Video_cmd(uint8_t *comandPtr, uint16_t size)
     HAL_UART_Transmit_DMA(&huart4, comandPtr, size);
     }
 
+void Video_send_init_to_display(uint8_t *comandPtr, uint16_t size)
+    {
+    uart4_trancieve();
+    HAL_UART_Transmit_IT(&huart4, (uint8_t*) comandPtr, size);
+    }
+
 char *Video_get_answer (void)
     {
     return strstr((char*) uartRecieveBuffer, "0123");

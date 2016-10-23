@@ -199,7 +199,7 @@ int main(void)
     /* USER CODE END 2 */
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
-    Video_cmd(init_array, sizeof(init_array));
+    Video_send_init_to_display(init_array, sizeof(init_array));
     HAL_Delay(10);
     while (1)
 	{

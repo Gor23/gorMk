@@ -109,5 +109,6 @@ void Video_clear_trancieve_buffer(void);
 void Video_cmd(uint8_t *comandPtr, uint16_t size);
 char *Video_get_answer (void);
 void Video_clear_recieve_buffer(void);
+void Video_send_init_to_display(uint8_t *comandPtr, uint16_t size);
 
 #endif /* STRINGS_H_ */
