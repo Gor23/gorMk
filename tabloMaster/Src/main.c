@@ -200,7 +200,6 @@ int main(void)
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     Video_send_init_to_display(init_array, sizeof(init_array));
-    HAL_Delay(10);
     while (1)
 	{
 //      if (!driverTimer)
