@@ -344,7 +344,7 @@ int main(void)
 		break;
 
 	    case WINNER_MODE:
-		timerStopValue = 20;
+		timerStopValue = 40;
 
 		Video_put_gif(&winerGif, true);
 
@@ -355,16 +355,15 @@ int main(void)
 //		    {
 //		    mainBuffer.bufferArrayPtr[i+START_POSITION] = 0;
 //		    }
-		sprintf((char*) teamsString, "%s:%s", (char*) &gameData.firstTeam, (char*) &gameData.firstTeamScore);
 
-		Video_put_string(&teams, Font_array);
+		Video_put_string(&teams, FontSmall_array);
 
-		ticks--;
-		if (!ticks)
-		    {
-		    imageMode = LOGO_MODE;
-		    ticks = 500;
-		    }
+//		ticks--;
+//		if (!ticks)
+//		    {
+//		    imageMode = LOGO_MODE;
+//		    ticks = 500;
+//		    }
 		break;
 
 	    case STRING_MODE:
@@ -404,7 +403,7 @@ int main(void)
 		    imageMode = SIMPLE_SCORE_MODE;
 		    }
 		}
-	    if (strstr((char*) &eventData.eventType, "TENNIS"))
+	    else if (strstr((char*) &eventData.eventType, "TENNIS"))
 		{
 		if (strstr((char*) &gameData.actionType, "POINT"))
 		    {
@@ -415,7 +414,7 @@ int main(void)
 		    imageMode = EXT_SCORE_MODE;
 		    }
 		}
-	    if (strstr((char*) &eventData.eventType, "BASKETBALL"))
+	    else if (strstr((char*) &eventData.eventType, "BASKETBALL"))
 		{
 		if (strstr((char*) &gameData.actionType, "GOAL"))
 		    {
@@ -426,19 +425,25 @@ int main(void)
 		    imageMode = SIMPLE_SCORE_MODE;
 		    }
 		}
-	    if (strstr((char*) &gameData.actionType, "WINNER"))
+	    else if (strstr((char*) &gameData.actionType, "WINNER"))
 		{
 		imageMode = WINNER_MODE;
+		sprintf((char*) teamsString, "%s:%s", (char*) &gameData.firstTeam, (char*) &gameData.firstTeamScore);
 		}
-	    if (strstr((char*) &eventData.eventType, "MESSAGE"))
+	    else if (strstr((char*) &eventData.eventType, "MESSAGE"))
 		{
 		imageMode = STRING_MODE;
 		}
-	    if (strstr((char*) &eventData.eventMessage, "NO_EVENTS"))
+	    else if (strstr((char*) &eventData.eventMessage, "NO_EVENTS"))
 		{
 		memset(&eventData.eventMessage, 0x00, MAX_EVENT_STRING_SIZE);
 		imageMode = LOGO_MODE;
 		}
+	    else if (strstr((char*) &eventData.eventType, "SYSTEM"))
+		{
+		imageMode = LOGO_MODE;
+		}
+
 	    }
 	/* USER CODE END WHILE */
 

@@ -32,8 +32,10 @@ const char actionType[] = "action_type";
 const char winnerTeamName[] = "team_name";
 const char score[] = "score";
 
-
-char wifiRecieveBuffer[WIFI_RECIEVE_ARRAY_SIZE] = {0};
+char wifiRecieveBuffer[WIFI_RECIEVE_ARRAY_SIZE] =
+    {
+    0
+    };
 
 char *ptrWifiRecieveBuffer;
 uint8_t wifiFlags = 0;
@@ -66,110 +68,104 @@ void Wifi_parser(void)
     Events_clear_strings_event_data();
     Wifi_null_removing();
 
-    if (Wifi_parser_get_value("type", MAX_EVENT_STRING_SIZE,
-	    (char*) &eventData.eventType))
+    if (Wifi_parser_get_value("type", MAX_EVENT_STRING_SIZE, (char*) &eventData.eventType))
 	{
-	Wifi_parser_get_value(actionType, MAX_EVENT_STRING_SIZE,
-		(char*) &gameData.actionType);
-	if (strstr((char*)&gameData.actionType, "WINNER"))
-	    {
-		Wifi_parser_get_value(winnerTeamName, MAX_EVENT_STRING_SIZE,
-			(char*) &gameData.firstTeam);
-		Wifi_parser_get_value(score, MAX_EVENT_STRING_SIZE,
-			(char*) &gameData.firstTeamScore);
-	    }
-	else
-	    {
-		Wifi_parser_get_value(firstTeamName, MAX_EVENT_STRING_SIZE,
-			(char*) &gameData.firstTeam);
-		Wifi_parser_get_value(secondTeamName, MAX_EVENT_STRING_SIZE,
-			(char*) &gameData.secondTeam);
-		Wifi_parser_get_value(firstTeamScore, MAX_EVENT_STRING_SIZE,
-			(char*) &gameData.firstTeamScore);
-		Wifi_parser_get_value(secondTeamScore, MAX_EVENT_STRING_SIZE,
-			(char*) &gameData.secondTeamScore);
-		Wifi_parser_get_value(additionalFirstTeamScore, MAX_EVENT_STRING_SIZE,
-			(char*) &gameData.additionalFirstTeamScore);
-		Wifi_parser_get_value(additionalSecondTeamScore, MAX_EVENT_STRING_SIZE,
-			(char*) &gameData.additionalSecondTeamScore);
-	    }
+	Wifi_parser_get_value(actionType, MAX_EVENT_STRING_SIZE, (char*) &gameData.actionType);
+	Wifi_parser_get_value(firstTeamName, MAX_EVENT_STRING_SIZE, (char*) &gameData.firstTeam);
+	Wifi_parser_get_value(secondTeamName, MAX_EVENT_STRING_SIZE, (char*) &gameData.secondTeam);
+	Wifi_parser_get_value(firstTeamScore, MAX_EVENT_STRING_SIZE, (char*) &gameData.firstTeamScore);
+	Wifi_parser_get_value(secondTeamScore, MAX_EVENT_STRING_SIZE, (char*) &gameData.secondTeamScore);
+	Wifi_parser_get_value(additionalFirstTeamScore, MAX_EVENT_STRING_SIZE,
+		(char*) &gameData.additionalFirstTeamScore);
+	Wifi_parser_get_value(additionalSecondTeamScore, MAX_EVENT_STRING_SIZE,
+		(char*) &gameData.additionalSecondTeamScore);
 	}
 
     else
 	{
-	Wifi_string_copy(system, (char*) &eventData.eventType,
-		MAX_EVENT_STRING_SIZE);
+	Wifi_parser_get_value(actionType, MAX_EVENT_STRING_SIZE, (char*) &gameData.actionType);
+	if (strstr((char*) &gameData.actionType, "WINNER"))
+	    {
+	    Wifi_parser_get_value(winnerTeamName, MAX_EVENT_STRING_SIZE, (char*) &gameData.firstTeam);
+	    Wifi_parser_get_value(score, MAX_EVENT_STRING_SIZE, (char*) &gameData.firstTeamScore);
+	    }
+	else
+	    {
+	    Wifi_string_copy(system, (char*) &eventData.eventType,
+	    MAX_EVENT_STRING_SIZE);
 
-	if (strstr(ptrWifiRecieveBuffer, noEvents))
-	    {
-	    Wifi_string_copy(noEvents, (char*) &eventData.eventMessage,
-		    MAX_EVENT_STRING_SIZE);
+	    if (strstr(ptrWifiRecieveBuffer, noEvents))
+		{
+		Wifi_string_copy(noEvents, (char*) &eventData.eventMessage,
+		MAX_EVENT_STRING_SIZE);
+		}
+	    else if (strstr(ptrWifiRecieveBuffer, badConn1))
+		{
+		Wifi_string_copy(badConn1, (char*) &eventData.eventMessage,
+		MAX_EVENT_STRING_SIZE);
+		}
+	    else if (strstr(ptrWifiRecieveBuffer, badConn2))
+		{
+		Wifi_string_copy(badConn2, (char*) &eventData.eventMessage,
+		MAX_EVENT_STRING_SIZE);
+		}
+	    else if (strstr(ptrWifiRecieveBuffer, badConn3))
+		{
+		Wifi_string_copy(badConn3, (char*) &eventData.eventMessage,
+		MAX_EVENT_STRING_SIZE);
+		}
+	    else if (strstr(ptrWifiRecieveBuffer, badConn4))
+		{
+		Wifi_string_copy(badConn4, (char*) &eventData.eventMessage,
+		MAX_EVENT_STRING_SIZE);
+		}
+	    else if (strstr(ptrWifiRecieveBuffer, badConn5))
+		{
+		Wifi_string_copy(badConn5, (char*) &eventData.eventMessage,
+		MAX_EVENT_STRING_SIZE);
+		}
+	    else if (strstr(ptrWifiRecieveBuffer, idle))
+		{
+		Wifi_string_copy(idle, (char*) &eventData.eventMessage,
+		MAX_EVENT_STRING_SIZE);
+		}
+	    else if (strstr(ptrWifiRecieveBuffer, connecting))
+		{
+		Wifi_string_copy(connecting, (char*) &eventData.eventMessage,
+		MAX_EVENT_STRING_SIZE);
+		}
+	    else if (strstr(ptrWifiRecieveBuffer, wrongPassword))
+		{
+		Wifi_string_copy(wrongPassword, (char*) &eventData.eventMessage,
+		MAX_EVENT_STRING_SIZE);
+		}
+	    else if (strstr(ptrWifiRecieveBuffer, noAPFound))
+		{
+		Wifi_string_copy(noAPFound, (char*) &eventData.eventMessage,
+		MAX_EVENT_STRING_SIZE);
+		}
+	    else if (strstr(ptrWifiRecieveBuffer, fail))
+		{
+		Wifi_string_copy(fail, (char*) &eventData.eventMessage,
+		MAX_EVENT_STRING_SIZE);
+		}
+	    else if (strstr(ptrWifiRecieveBuffer, connected))
+		{
+		Wifi_string_copy(connected, (char*) &eventData.eventMessage,
+		MAX_EVENT_STRING_SIZE);
+		}
+	    else if (strstr(ptrWifiRecieveBuffer, connected))
+		{
+		Wifi_string_copy(noEvents, (char*) &eventData.eventMessage,
+		MAX_EVENT_STRING_SIZE);
+		}
 	    }
-	else if (strstr(ptrWifiRecieveBuffer, badConn1))
-	    {
-	    Wifi_string_copy(badConn1, (char*) &eventData.eventMessage,
-		    MAX_EVENT_STRING_SIZE);
-	    }
-	else if (strstr(ptrWifiRecieveBuffer, badConn2))
-	    {
-	    Wifi_string_copy(badConn2, (char*) &eventData.eventMessage,
-		    MAX_EVENT_STRING_SIZE);
-	    }
-	else if (strstr(ptrWifiRecieveBuffer, badConn3))
-	    {
-	    Wifi_string_copy(badConn3, (char*) &eventData.eventMessage,
-		    MAX_EVENT_STRING_SIZE);
-	    }
-	else if (strstr(ptrWifiRecieveBuffer, badConn4))
-	    {
-	    Wifi_string_copy(badConn4, (char*) &eventData.eventMessage,
-		    MAX_EVENT_STRING_SIZE);
-	    }
-	else if (strstr(ptrWifiRecieveBuffer, badConn5))
-	    {
-	    Wifi_string_copy(badConn5, (char*) &eventData.eventMessage,
-		    MAX_EVENT_STRING_SIZE);
-	    }
-	else if (strstr(ptrWifiRecieveBuffer, idle))
-	    {
-	    Wifi_string_copy(idle, (char*) &eventData.eventMessage,
-		    MAX_EVENT_STRING_SIZE);
-	    }
-	else if (strstr(ptrWifiRecieveBuffer, connecting))
-	    {
-	    Wifi_string_copy(connecting, (char*) &eventData.eventMessage,
-		    MAX_EVENT_STRING_SIZE);
-	    }
-	else if (strstr(ptrWifiRecieveBuffer, wrongPassword))
-	    {
-	    Wifi_string_copy(wrongPassword, (char*) &eventData.eventMessage,
-		    MAX_EVENT_STRING_SIZE);
-	    }
-	else if (strstr(ptrWifiRecieveBuffer, noAPFound))
-	    {
-	    Wifi_string_copy(noAPFound, (char*) &eventData.eventMessage,
-		    MAX_EVENT_STRING_SIZE);
-	    }
-	else if (strstr(ptrWifiRecieveBuffer, fail))
-	    {
-	    Wifi_string_copy(fail, (char*) &eventData.eventMessage,
-		    MAX_EVENT_STRING_SIZE);
-	    }
-	else if (strstr(ptrWifiRecieveBuffer, connected))
-	    {
-	    Wifi_string_copy(connected, (char*) &eventData.eventMessage,
-		    MAX_EVENT_STRING_SIZE);
-	    }
-	else if (strstr(ptrWifiRecieveBuffer, connected))
-	    {
-	    Wifi_string_copy(noEvents, (char*) &eventData.eventMessage,
-		    MAX_EVENT_STRING_SIZE);
-	    }
+
 	}
 
     memset(wifiRecieveBuffer, 0x00, WIFI_RECIEVE_ARRAY_SIZE);
     USER_UART_Recieve_INIT(&Wifi_uart, (uint8_t*) wifiRecieveBuffer,
-	    WIFI_RECIEVE_ARRAY_SIZE);
+    WIFI_RECIEVE_ARRAY_SIZE);
     wifiFlags &= ~(1 << DATA_UPDATE);
     }
 
@@ -177,8 +173,7 @@ void Wifi_parser(void)
  *
  */
 
-uint8_t Wifi_parser_get_value(const char *keyPtr, uint8_t outputStringMaxSize,
-	char *outputArrPtr)
+uint8_t Wifi_parser_get_value(const char *keyPtr, uint8_t outputStringMaxSize, char *outputArrPtr)
     {
 
     char *ptr;
@@ -304,7 +299,7 @@ void uart2_start_recieve_trigger(uint8_t isNeedTurnOn)
 	}
     }
 
-void Wifi_init ()
+void Wifi_init()
     {
     MX_USART2_UART_Init();
     MX_TIM6_Init();
