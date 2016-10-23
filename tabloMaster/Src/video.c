@@ -12,7 +12,7 @@ UART_HandleTypeDef huart4;
 DMA_HandleTypeDef hdma_uart4_tx;
 TIM_HandleTypeDef htim2;
 
-videoBuff mainBuffer;
+VideoBuff mainBuffer;
 uint8_t videoBuffer[TRANCIEVE_ARRAY_SIZE];
 uint8_t videoBufferSec[TRANCIEVE_ARRAY_SIZE];
 uint8_t uartRecieveBuffer[RECIEVE_ARRAY_SIZE];
@@ -68,7 +68,7 @@ void Video_change_buffers(uint8_t *firstBuff, uint8_t *secondBuff)
 	}
     }
 
-uint8_t Video_put_string(text *textStruct, const tChar *fonts)
+uint8_t Video_put_string(Text *textStruct, const tChar *fonts)
     {
     uint32_t yOffsetInBits = textStruct->yOffset * mainBuffer.xLength;
     int32_t letterOffset = textStruct->xOffset + yOffsetInBits + textStruct->stringShift;
@@ -134,17 +134,17 @@ uint8_t Video_put_string(text *textStruct, const tChar *fonts)
     return COMPLETE;
     }
 
-void Video_move_string_left(text *textStruct, uint8_t step)
+void Video_move_string_left(Text *textStruct, uint8_t step)
     {
     textStruct->stringShift -= step;
     }
 
-void Video_move_string_right(text *textStruct, uint8_t step)
+void Video_move_string_right(Text *textStruct, uint8_t step)
     {
     textStruct->stringShift += step;
     }
 
-uint8_t Video_put_n_move_string_left(text *textStruct, const tChar *fonts, uint8_t step)
+uint8_t Video_put_n_move_string_left(Text *textStruct, const tChar *fonts, uint8_t step)
     {
     Video_move_string_left(textStruct, step);
     if (Video_put_string(textStruct, fonts) == COMPLETE)
@@ -172,7 +172,7 @@ void Video_put_and_move_string(uint8_t *text, const tChar *fonts)
 //	 }
     }
 
-void Video_put_image(image *imgPtr)
+void Video_put_image(Image *imgPtr)
     {
     uint32_t y = 0;
     uint32_t x = 0;
@@ -197,7 +197,7 @@ void Video_put_image(image *imgPtr)
 	}
     }
 
-uint8_t Video_put_image_edge(image *imgPtr)
+uint8_t Video_put_image_edge(Image *imgPtr)
     {
     uint8_t answer = 1;
     uint32_t y = 0;
@@ -225,7 +225,7 @@ uint8_t Video_put_image_edge(image *imgPtr)
     return answer;
     }
 
-void Video_move_image(image *imgPtr, uint16_t xMove, uint16_t yMove)
+void Video_move_image(Image *imgPtr, uint16_t xMove, uint16_t yMove)
     {
     memset(mainBuffer.bufferArrayPtr, 0x00, mainBuffer.size);
     imgPtr->xOffset = xMove;
@@ -294,12 +294,12 @@ uint8_t Video_put_gif(imageGif *imgPtr, uint8_t invertFlag)
 
 void Video_put_form(ScoreForm *form, FormType type)
     {
-    Video_put_string(&form->firstTeamScore, Font2_array);
     Video_put_string(&form->scoreDevider, Font2_array);
+    Video_put_string(&form->firstTeamScore, Font2_array);
     Video_put_string(&form->secondTeamScore, Font2_array);
 
-    Video_put_string(&form->firsTeamName, Font_array);
     Video_put_string(&form->teamDevider, Font_array);
+    Video_put_string(&form->firsTeamName, Font_array);
     Video_put_string(&form->secondTeamName, Font_array);
 
     if (type == EXTENDED_FORM)
@@ -308,6 +308,8 @@ void Video_put_form(ScoreForm *form, FormType type)
 	Video_put_string(&form->secondTeamAdditional, Font_array);
 	}
     }
+
+//void Video_align_for_left_side(Text)
 
 void Video_send_data_to_display(void)
     {

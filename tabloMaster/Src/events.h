@@ -9,11 +9,25 @@
 #define EVENTS_H_
 
 #include <stdint.h>
-#include "video.h"
+#include "typedefs.h"
 #include "main.h"
 
 #define MAX_EVENT_STRING_SIZE 30
 #define MAX_EVENT_STRING_SCORE_SIZE 5
+
+#define FIRST_TEAM_NAME_X_OFFSET		0
+#define TEAM_NAME_Y_OFFSET			6
+#define FIRST_TEAM_NAME_RIGHT_VISIBLE_EDGE	TEAM_DEVIDER_X_OFFSET - 1
+#define TEAM_DEVIDER_X_OFFSET			X_PIXELS/2-4 	// TODO choose correct value
+#define SECOND_TEAM_NAME_X_OFFSET		X_PIXELS/2+2	// TODO align to left edge
+#define SECOND_TEAM_NAME_RIGHT_VISIBLE_EDGE	X_PIXELS
+
+#define FIRST_TEAM_SCORE_X_OFFSET		0
+#define TEAM_SCORE_Y_OFFSET			0
+#define FIRST_TEAM_SCORE_RIGHT_VISIBLE_EDGE	SCORE_DEVIDER_X_OFFSET - 1
+#define SCORE_DEVIDER_X_OFFSET			X_PIXELS/2-18 	// TODO choose correct value
+#define SECOND_TEAM_SCORE_X_OFFSET	   	X_PIXELS/2+4	// TODO align to left edge
+#define SECOND_TEAM_SCORE_RIGHT_VISIBLE_EDGE	X_PIXELS
 
 typedef struct
     {
@@ -38,10 +52,11 @@ typedef struct
 
 
 
-GameData gameData;
-EventData eventData;
+extern GameData gameData;
+extern EventData eventData;
 
 void Events_clear_strings_game_data(void);
 void Events_clear_strings_event_data(void);
+void Event_set_n_display_score(FormType type);
 
 #endif /* EVENTS_H_ */

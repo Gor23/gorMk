@@ -112,10 +112,10 @@ int main(void)
 	'I', 'N', xMatrix, yMatrix, '\n'
 	};
 
-    text testString;
-    text logoString;
-    text score;
-    text teams;
+    Text testString;
+    Text logoString;
+    Text score;
+    Text teams;
     imageGif logoGif;
     imageGif winerGif;
 
@@ -124,7 +124,7 @@ int main(void)
     uint8_t scoreString[MAX_EVENT_STRING_SCORE_SIZE * 2];
     uint8_t teamsString[MAX_EVENT_STRING_SIZE * 2];
 
-    uint8_t imageMode = LOGO_MODE;
+    uint8_t imageMode = SCORE_MODE;
     uint32_t ticks = 40;
 
     char *ptr_char0;
@@ -350,15 +350,17 @@ int main(void)
 
 	    case SCORE_MODE:
 		timerStopValue = 400;
-		memset(scoreString, 0x00, MAX_EVENT_STRING_SCORE_SIZE * 2);
-		memset(teamsString, 0x00, MAX_EVENT_STRING_SIZE * 2);
-		sprintf((char*) scoreString, "%s:%s", (char*) &gameData.firstTeamScore,
-			(char*) &gameData.secondTeamScore);
-		Video_put_string(&score, Font2_array);
+//		memset(scoreString, 0x00, MAX_EVENT_STRING_SCORE_SIZE * 2);
+//		memset(teamsString, 0x00, MAX_EVENT_STRING_SIZE * 2);
+//		sprintf((char*) scoreString, "%s:%s", (char*) &gameData.firstTeamScore,
+//			(char*) &gameData.secondTeamScore);
+//		Video_put_string(&score, Font2_array);
+//
+//		sprintf((char*) teamsString, "%s - %s", (char*) &gameData.firstTeam, (char*) &gameData.secondTeam);
+//
+//		Video_put_string(&teams, Font_array);
 
-		sprintf((char*) teamsString, "%s - %s", (char*) &gameData.firstTeam, (char*) &gameData.secondTeam);
-
-		Video_put_string(&teams, Font_array);
+		Event_set_n_display_score(SIMPLE_FORM);
 
 //		ticks--;
 //
