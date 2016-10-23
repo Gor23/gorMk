@@ -13,6 +13,8 @@
 
 #define SPACE_WIDTH 1
 
+#define RECIEVE_ARRAY_SIZE	64
+
 #include "string.h"
 #include "fonts.h"
 #include "images.h"
@@ -89,17 +91,23 @@ typedef enum
     EXTENDED_FORM
     } FormType;
 
-void Video_change_buffers(videoBuff *vbPtr, uint8_t *firstBuff, uint8_t *secondBuff);
-uint8_t Video_put_string(text *textStruct, const tChar *fonts, videoBuff *videoBuffPtr);
+void Video_init(void);
+void Video_change_buffers(uint8_t *firstBuff, uint8_t *secondBuff);
+uint8_t Video_put_string(text *textStruct, const tChar *fonts);
 void Video_move_string_left(text *textStruct, uint8_t step);
 void Video_move_string_right(text *textStruct, uint8_t step);
-uint8_t Video_put_n_move_string_left(text *textStruct, const tChar *fonts, uint8_t step, videoBuff *videoBuffPtr);
-void Video_put_image(image *imgPtr, videoBuff *videoBuffPtr);
-uint8_t *Video_put_string_fonts(uint8_t *text, const tChar *fonts, image *videoBuffPtr);
-void Video_put_and_move_string(uint8_t *text, const tChar *fonts, image *videoBuffPtr);
-uint8_t Video_put_image_edge(image *imgPtr, videoBuff *videoBuffPtr);
-void Video_move_image(image *imgPtr, videoBuff *videoBuffPtr, uint16_t xMove, uint16_t yMove);
-uint8_t Video_put_gif(imageGif *imgPtr, videoBuff *videoBuffPtr, uint8_t invertFlag);
-void Video_put_form(ScoreForm *form, videoBuff *videoBuffPtr, FormType type);
+uint8_t Video_put_n_move_string_left(text *textStruct, const tChar *fonts, uint8_t step);
+void Video_put_image(image *imgPtr);
+uint8_t *Video_put_string_fonts(uint8_t *text, const tChar *fonts);
+void Video_put_and_move_string(uint8_t *text, const tChar *fonts);
+uint8_t Video_put_image_edge(image *imgPtr);
+void Video_move_image(image *imgPtr, uint16_t xMove, uint16_t yMove);
+uint8_t Video_put_gif(imageGif *imgPtr, uint8_t invertFlag);
+void Video_put_form(ScoreForm *form, FormType type);
+void Video_send_data_to_display(void);
+void Video_clear_trancieve_buffer(void);
+void Video_cmd(uint8_t *comandPtr, uint16_t size);
+char *Video_get_answer (void);
+void Video_clear_recieve_buffer(void);
 
 #endif /* STRINGS_H_ */

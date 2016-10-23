@@ -84,7 +84,7 @@ void Event_set_n_display_score(GameData *data, FormType type)
 	scoreForm.secondTeamScore.visibleRightEdge = SECOND_TEAM_SCORE_RIGHT_VISIBLE_EDGE;
 	scoreForm.secondTeamScore.stringPtr = data->secondTeamScore;
 
-	//Video_put_form(&simpleScoreForm, type);			//TODO realize method
+	Video_put_form(&scoreForm, type);			//TODO realize method
 	break;
 
     case EXTENDED_FORM:
@@ -136,7 +136,7 @@ void Event_set_n_display_score(GameData *data, FormType type)
 	scoreForm.secondTeamAdditional.visibleRightEdge = FIRST_TEAM_SCORE_RIGHT_VISIBLE_EDGE;
 	scoreForm.secondTeamAdditional.stringPtr = data->additionalSecondTeamScore;
 
-	//Video_put_form(&simpleScoreForm, type);			//TODO realize method
+	Video_put_form(&scoreForm, type);			//TODO realize method
 	break;
 	}
     }

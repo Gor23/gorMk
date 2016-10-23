@@ -33,7 +33,8 @@
 #define TIMER_1_STOP_VALUE	100
 #define TIMER_2_STOP_VALUE	200
 
-#define	HUART4_RECIEVE_TIMEOUT 70
+//#define	HUART4_RECIEVE_TIMEOUT 70
+#define	HUART4_RECIEVE_TIMEOUT 100
 
 #define NO_ANSWER_TIMEOUT 20
 
@@ -44,9 +45,6 @@ enum modes {
 enum driverStatus {
 	INIT, CHANGE_BUFER, ANSWER_CHECK, SEND_DATA, WAIT_FOR_DATA_IS_SEND, WAIT_FOR_DATA_READY
 };
-
-extern TIM_HandleTypeDef htim6;
-extern UART_HandleTypeDef huart2;
 
 extern volatile uint32_t timer1;
 extern volatile uint32_t timer2;

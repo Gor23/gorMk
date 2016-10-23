@@ -9,6 +9,7 @@
 #define FONTS_H_
 
 #include <stdint.h>
+#include "main.h"
 
 typedef struct
 {

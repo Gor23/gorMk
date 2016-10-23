@@ -298,3 +298,11 @@ void uart2_start_recieve_trigger(uint8_t isNeedTurnOn)
 	htim6.Instance->CR1 |= TIM_CR1_CEN;
 	}
     }
+
+void Wifi_init ()
+    {
+    MX_USART2_UART_Init();
+    MX_TIM6_Init();
+    USER_UART_Recieve_INIT(&huart2, (uint8_t*) wifiRecieveBuffer,
+    WIFI_RECIEVE_ARRAY_SIZE);
+    }
