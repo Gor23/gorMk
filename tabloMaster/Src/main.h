@@ -38,15 +38,12 @@
 #define NO_ANSWER_TIMEOUT 20
 
 enum modes {
-	LOGO_MODE, SCORE_MODE, GOAL_MODE, STRING_MODE, TEST_MODE, WINNER_MODE, POINT_MODE
+	LOGO_MODE, SIMPLE_SCORE_MODE, EXT_SCORE_MODE, GOAL_MODE, STRING_MODE, TEST_MODE, WINNER_MODE, POINT_MODE
 };
 
 enum driverStatus {
 	INIT, CHANGE_BUFER, ANSWER_CHECK, SEND_DATA, WAIT_FOR_DATA_IS_SEND, WAIT_FOR_DATA_READY
 };
-
-extern TIM_HandleTypeDef htim6;
-extern UART_HandleTypeDef huart2;
 
 extern volatile uint32_t timer1;
 extern volatile uint32_t timer2;

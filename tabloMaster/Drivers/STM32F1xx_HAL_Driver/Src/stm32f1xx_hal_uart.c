@@ -970,7 +970,6 @@ void USER_UART_Clear_Recieve_Buffer(UART_HandleTypeDef *huart, uint16_t buffSize
 {
 	 memset (huart->pRxBuffPtr, 0x00 ,buffSize);
 	   huart->RxXferCount = 0;
-
 }
 
 void USER_UART_Receive_IT(UART_HandleTypeDef *huart)

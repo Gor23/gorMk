@@ -52,53 +52,24 @@ SPI_HandleTypeDef hspi1;
 DMA_HandleTypeDef hdma_spi1_rx;
 
 TIM_HandleTypeDef htim1;
-TIM_HandleTypeDef htim2;
-
 TIM_HandleTypeDef htim7;
-
-UART_HandleTypeDef huart4;
 UART_HandleTypeDef huart1;
-
-DMA_HandleTypeDef hdma_uart4_tx;
 DMA_HandleTypeDef hdma_usart1_tx;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-void
-uart4_recieve(void);
-void
-uart4_trancieve(void);
-void
-dma_trancieve_callback(void);
-void
-void_function(uint8_t in);
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
-void
-SystemClock_Config(void);
-void
-Error_Handler(void);
-static void
-MX_GPIO_Init(void);
-static void
-MX_DMA_Init(void);
-static void
-MX_CRC_Init(void);
-static void
-MX_IWDG_Init(void);
-static void
-MX_SPI1_Init(void);
-static void
-MX_TIM1_Init(void);
-static void
-MX_TIM2_Init(void);
-static void
-MX_UART4_Init(void);
-static void
-MX_USART1_UART_Init(void);
-static void
-MX_TIM7_Init(void);
+void SystemClock_Config(void);
+void Error_Handler(void);
+static void MX_GPIO_Init(void);
+static void MX_CRC_Init(void);
+static void MX_IWDG_Init(void);
+static void MX_SPI1_Init(void);
+static void MX_TIM1_Init(void);
+static void MX_USART1_UART_Init(void);
+static void MX_TIM7_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -127,16 +98,13 @@ int main(void)
 
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
-    MX_DMA_Init();
 //  MX_CRC_Init();
 //  MX_IWDG_Init();
 //  MX_SPI1_Init();
 //  MX_TIM1_Init();
-    MX_TIM2_Init();
-    MX_UART4_Init();
-    MX_USART1_UART_Init();
-    MX_USART2_UART_Init();
-    MX_TIM6_Init();
+    Wifi_init();
+    Video_init();
+//  MX_USART1_UART_Init();
 //  MX_TIM7_Init();
 
     uint8_t init_array[] =
@@ -144,29 +112,18 @@ int main(void)
 	'I', 'N', xMatrix, yMatrix, '\n'
 	};
 
+    Text testString;
+    Text logoString;
 
-    videoBuff mainBuffer;
-    text testString;
-    text logoString;
-    text score;
-    text teams;
-    text string;
+    Text teams;
     imageGif logoGif;
     imageGif winerGif;
 
-    uint8_t uartRecieveBuffer[64];
-    uint8_t videoBuffer[TRANCIEVE_ARRAY_SIZE];
-    uint8_t videoBufferSec[TRANCIEVE_ARRAY_SIZE];
     uint8_t systemMesageBuff[SYSTEM_TEXT_BUF_SIZE];
-    uint8_t stringBuff[STRING_BUF_SIZE];
-    uint8_t scoreString[MAX_EVENT_STRING_SCORE_SIZE * 2];
-    uint8_t teamsString [MAX_EVENT_STRING_SIZE * 2];
+    uint8_t teamsString[MAX_EVENT_STRING_SIZE * 2];
 
     uint8_t imageMode = LOGO_MODE;
     uint32_t ticks = 40;
-
-    char *ptr_char0;
-    char *ptr = NULL;
 
     ///////////////////// set buffer an images properties
     //footballForm.formImage
@@ -193,22 +150,14 @@ int main(void)
     winerGif.repeats = 0;
     winerGif.repeatsFrom = 0;
 
-    mainBuffer.xLength = xMatrix * 64;
-    mainBuffer.yLength = TRANCIEVE_ARRAY_SIZE / mainBuffer.xLength;
-    mainBuffer.size = TRANCIEVE_ARRAY_SIZE;
-    mainBuffer.bufferArrayPtr = videoBuffer;
-    mainBuffer.readBufferArrayPointer = videoBufferSec;
-    mainBuffer.writeFlag = 0;
-
     testString.xOffset = 0;
     testString.yOffset = 1;
-   // testString.stringPtr = "EVENTS";
     testString.stringPtr = "WWW.EVENTSSION.COM // WWW.EVENTSSION.COM";
     testString.stringShift = 0;
     testString.visibleRightEdge = 128;
 
     logoString.xOffset = 56;
-    logoString.yOffset = 2;
+    logoString.yOffset = 1;
     logoString.stringPtr = &eventData.eventMessage;
     logoString.stringShift = 0;
     logoString.visibleRightEdge = 128;
@@ -219,18 +168,6 @@ int main(void)
     teams.stringShift = 0;
     teams.visibleRightEdge = 128;
 
-    score.xOffset = 18;
-    score.yOffset = 0;
-    score.stringPtr = scoreString;
-    score.stringShift = 0;
-    score.visibleRightEdge = 128;
-
-    ///////////////////////////
-
-    memset(videoBuffer, 0x00, TRANCIEVE_ARRAY_SIZE);
-    memset(stringBuff, 0x00, STRING_BUF_SIZE);
-    memset(uartRecieveBuffer, 0x00, sizeof(uartRecieveBuffer));
-    memset(videoBufferSec, 0x00, TRANCIEVE_ARRAY_SIZE);
 //   HAL_TIM_Base_Start_IT(&htim6);
     /* USER CODE END 2 */
 
@@ -241,17 +178,13 @@ int main(void)
     HAL_Delay(10);
     uint8_t videoDriverStatus = INIT;
     uint8_t noAnswerTimer = 0;
-    USER_UART_Recieve_INIT(&huart4, uartRecieveBuffer,
-	    sizeof(uartRecieveBuffer));
-    USER_UART_Recieve_INIT(&huart2, (uint8_t*) wifiRecieveBuffer,
-    WIFI_RECIEVE_ARRAY_SIZE);
+
     /* USER CODE BEGIN 2 */
 
     /* USER CODE END 2 */
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
-    uart4_trancieve();
-    HAL_UART_Transmit_IT(&huart4, (uint8_t*) &init_array, sizeof(init_array));
+    Video_send_init_to_display(init_array, sizeof(init_array));
     while (1)
 	{
 //      if (!driverTimer)
@@ -344,16 +277,12 @@ int main(void)
 	if ((ready) && (!dmaSend))
 	    {
 	    HAL_Delay(3);
-	    uart4_trancieve();
-	    HAL_UART_Transmit_DMA(&huart4, (uint8_t*) "BUFC\n",
-		    strlen("BUFC\n"));
+	    Video_cmd((uint8_t*) "BUFC\n", strlen("BUFC\n"));
 	    HAL_Delay(4);
-	    while (!ptr)
+	    while (!Video_get_answer())
 		{
-		ptr = strstr((char*) uartRecieveBuffer, "0123");
 		}
-	    ptr = NULL;
-	    USER_UART_Clear_Recieve_Buffer(&huart4, sizeof(uartRecieveBuffer));
+	    Video_clear_recieve_buffer();
 	    // USER_UART_clear_rx(&huart2);
 	    /*if (ptr == NULL)
 	     {
@@ -364,9 +293,7 @@ int main(void)
 	    // Video_change_buffers(&mainBuffer, videoBuffer, videoBufferSec);
 	    //	answerOk = 1;
 	    //HAL_UART_Transmit_DMA(&huart2, (uint8_t*)&lcd_image_mas, TRANCIEVE_ARRAY_SIZE);
-	    uart4_trancieve();
-	    HAL_UART_Transmit_DMA(&huart4, (uint8_t*) &videoBuffer,
-	    TRANCIEVE_ARRAY_SIZE);
+	    Video_send_data_to_display();
 	    // }
 	    dmaSend = 1;
 	    ready = 0;
@@ -375,78 +302,62 @@ int main(void)
 
 	if ((timer2 == timerStopValue) && (!ready))
 	    {
-	    memset(videoBuffer, 0x00, TRANCIEVE_ARRAY_SIZE);
+	    Video_clear_trancieve_buffer();
 	    switch (imageMode)
 		{
 
 	    case LOGO_MODE:
 		memset(systemMesageBuff, 0x00, SYSTEM_TEXT_BUF_SIZE);
 		timerStopValue = 250;
-		Video_put_gif(&logoGif, &mainBuffer, false);
+		Video_put_gif(&logoGif, false);
 
-		Video_put_string(&logoString, Font_array, &mainBuffer);
+		Video_put_string(&logoString, FontSmall_array);
 
 		break;
 
 	    case GOAL_MODE:
 		timerStopValue = 70;
-		if (Video_put_gif(&goalGifStruct, &mainBuffer, false) == 'S')
+		if (Video_put_gif(&goalGifStruct, false) == 'S')
 		    {
-		    imageMode = SCORE_MODE;
+		    imageMode = SIMPLE_SCORE_MODE;
 		    ticks = 20;
 		    }
 		break;
 
 	    case POINT_MODE:
 		timerStopValue = 70;
-		if (Video_put_gif(&pointGifStruct, &mainBuffer, true) == 'S')
+		if (Video_put_gif(&pointGifStruct, true) == 'S')
 		    {
-		    imageMode = SCORE_MODE;
+		    imageMode = EXT_SCORE_MODE;
 		    ticks = 20;
 		    }
 		break;
 
-	    case SCORE_MODE:
+	    case SIMPLE_SCORE_MODE:
 		timerStopValue = 400;
-		memset(scoreString, 0x00, MAX_EVENT_STRING_SCORE_SIZE * 2);
-		memset(teamsString, 0x00, MAX_EVENT_STRING_SIZE * 2);
-		sprintf((char*) scoreString, "%s:%s",
-						(char*) &gameData.firstTeamScore,
-						(char*) &gameData.secondTeamScore);
-		Video_put_string(&score, Font2_array, &mainBuffer);
+		Event_set_n_display_score(SIMPLE_FORM);
+		break;
 
-		sprintf((char*) teamsString, "%s - %s",
-					(char*) &gameData.firstTeam,
-					(char*) &gameData.secondTeam);
-
-		Video_put_string(&teams, Font_array, &mainBuffer);
-
-//		ticks--;
-//
-//		if (!ticks)
-//		    {
-//		    imageMode = LOGO_MODE;
-//		    ticks = 80;
-//		    }
+	    case EXT_SCORE_MODE:
+		timerStopValue = 400;
+		Event_set_n_display_score(EXTENDED_FORM);
 		break;
 
 	    case WINNER_MODE:
 		timerStopValue = 20;
 
-		Video_put_gif(&winerGif, &mainBuffer, true);
+		Video_put_gif(&winerGif, true);
 
 		///clear down row////////
-#define START_POSITION	896
-#define END_POSITION	1024
-		for(uint16_t i = 0; i<END_POSITION; i++)
-		    {
-		    mainBuffer.bufferArrayPtr[i+START_POSITION] = 0;
-		    }
-		sprintf((char*) teamsString, "%s:%s",
-								(char*) &gameData.firstTeam,
-								(char*) &gameData.firstTeamScore);
+//#define START_POSITION	896
+//#define END_POSITION	1024
+//		for(uint16_t i = 0; i<END_POSITION; i++)
+//		    {
+//		    mainBuffer.bufferArrayPtr[i+START_POSITION] = 0;
+//		    }
+		sprintf((char*) teamsString, "%s:%s", (char*) &gameData.firstTeam, (char*) &gameData.firstTeamScore);
 
-		Video_put_string(&teams, Font_array, &mainBuffer);
+		Video_put_string(&teams, Font_array);
 
 		ticks--;
 		if (!ticks)
@@ -458,7 +369,7 @@ int main(void)
 
 	    case STRING_MODE:
 		timerStopValue = 50;
-		if (Video_put_string(&testString, Font2_array, &mainBuffer)==COMPLETE)
+		if (Video_put_string(&testString, Font2_array) == COMPLETE)
 		    {
 		    testString.stringShift = 0;
 		    imageMode = LOGO_MODE;
@@ -482,37 +393,52 @@ int main(void)
 	    {
 	    Wifi_parser();
 
-	    if (strstr((char*)&eventData.eventType, "FOOTBALL"))
+	    if (strstr((char*) &eventData.eventType, "FOOTBALL"))
 		{
-		if(strstr((char*)&gameData.actionType, "GOAL"))
+		if (strstr((char*) &gameData.actionType, "GOAL"))
 		    {
 		    imageMode = GOAL_MODE;
 		    }
-		if(strstr((char*)&gameData.actionType, "UPDATE"))
+		if (strstr((char*) &gameData.actionType, "UPDATE"))
 		    {
-		    imageMode = SCORE_MODE;
+		    imageMode = SIMPLE_SCORE_MODE;
 		    }
 		}
-	    if (strstr((char*)&eventData.eventType, "TENNIS"))
+	    if (strstr((char*) &eventData.eventType, "TENNIS"))
 		{
-		if(strstr((char*)&gameData.actionType, "POINT"))
+		if (strstr((char*) &gameData.actionType, "POINT"))
 		    {
 		    imageMode = POINT_MODE;
 		    }
-		if(strstr((char*)&gameData.actionType, "UPDATE"))
+		if (strstr((char*) &gameData.actionType, "UPDATE"))
 		    {
-		    imageMode = SCORE_MODE;
+		    imageMode = EXT_SCORE_MODE;
 		    }
 		}
-	    if (strstr((char*)&gameData.actionType, "WINNER"))
+	    if (strstr((char*) &eventData.eventType, "BASKETBALL"))
+		{
+		if (strstr((char*) &gameData.actionType, "GOAL"))
+		    {
+		    imageMode = SIMPLE_SCORE_MODE;		//TODO add animation
+		    }
+		if (strstr((char*) &gameData.actionType, "UPDATE"))
+		    {
+		    imageMode = SIMPLE_SCORE_MODE;
+		    }
+		}
+	    if (strstr((char*) &gameData.actionType, "WINNER"))
 		{
 		imageMode = WINNER_MODE;
 		}
-	    if (strstr((char*)&eventData.eventType, "MESSAGE"))
+	    if (strstr((char*) &eventData.eventType, "MESSAGE"))
 		{
 		imageMode = STRING_MODE;
 		}
-
+	    if (strstr((char*) &eventData.eventMessage, "NO_EVENTS"))
+		{
+		memset(&eventData.eventMessage, 0x00, MAX_EVENT_STRING_SIZE);
+		imageMode = LOGO_MODE;
+		}
 	    }
 	/* USER CODE END WHILE */
 
@@ -525,26 +451,6 @@ int main(void)
 
 /* USER CODE BEGIN 4 */
 
-void uart4_recieve(void)
-    {
-    HAL_TIM_Base_Start_IT(&htim2);
-    //HAL_GPIO_WritePin(GPIOC, GPIO_PIN_12, GPIO_PIN_RESET);
-    }
-
-void uart4_trancieve(void)
-    {
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_12, GPIO_PIN_SET);
-    }
-
-void dma_trancieve_callback(void)
-    {
-    uart4_recieve();
-    }
-
-void void_function(uint8_t in)
-    {
-
-    }
 /* USER CODE END 4 */
 
 /** System Clock Configuration
@@ -555,8 +461,7 @@ void SystemClock_Config(void)
     RCC_OscInitTypeDef RCC_OscInitStruct;
     RCC_ClkInitTypeDef RCC_ClkInitStruct;
 
-    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSI
-	    | RCC_OSCILLATORTYPE_HSE;
+    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSI | RCC_OSCILLATORTYPE_HSE;
     RCC_OscInitStruct.HSEState = RCC_HSE_ON;
     RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
     RCC_OscInitStruct.LSIState = RCC_LSI_ON;
@@ -568,8 +473,7 @@ void SystemClock_Config(void)
 	Error_Handler();
 	}
 
-    RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK
-	    | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+    RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
     RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
     RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
     RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
@@ -668,38 +572,6 @@ static void MX_TIM1_Init(void)
 	}
     }
 
-/* TIM2 init function */
-static void MX_TIM2_Init(void)
-    {
-
-    TIM_ClockConfigTypeDef sClockSourceConfig;
-    TIM_MasterConfigTypeDef sMasterConfig;
-
-    htim2.Instance = TIM2;
-    htim2.Init.Prescaler = 71;
-    htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-    htim2.Init.Period = HUART4_RECIEVE_TIMEOUT;
-    htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-    if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
-	{
-	Error_Handler();
-	}
-
-    sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-    if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
-	{
-	Error_Handler();
-	}
-
-    sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-    sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-    if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
-	{
-	Error_Handler();
-	}
-    HAL_NVIC_EnableIRQ(TIM2_IRQn);
-    }
-
 /* TIM6 init function */
 
 /* TIM7 init function */
@@ -726,27 +598,6 @@ static void MX_TIM7_Init(void)
     HAL_NVIC_EnableIRQ(TIM7_IRQn);
     }
 
-/* UART4 init function */
-static void MX_UART4_Init(void)
-    {
-
-    huart4.Instance = UART4;
-    huart4.Init.BaudRate = 256000;
-    huart4.Init.WordLength = UART_WORDLENGTH_8B;
-    huart4.Init.StopBits = UART_STOPBITS_1;
-    huart4.Init.Parity = UART_PARITY_NONE;
-    huart4.Init.Mode = UART_MODE_TX_RX;
-    huart4.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-    huart4.Init.OverSampling = UART_OVERSAMPLING_16;
-    huart4.rs485FlowControlFunction = &uart4_recieve;
-    huart4.resrtTimer = &void_function;
-    if (HAL_UART_Init(&huart4) != HAL_OK)
-	{
-	Error_Handler();
-	}
-
-    }
-
 /* USART1 init function */
 static void MX_USART1_UART_Init(void)
     {
@@ -763,31 +614,6 @@ static void MX_USART1_UART_Init(void)
 	{
 	Error_Handler();
 	}
-
-    }
-
-/** 
- * Enable DMA controller clock
- */
-static void MX_DMA_Init(void)
-    {
-    /* DMA controller clock enable */
-    __HAL_RCC_DMA1_CLK_ENABLE()
-    ;
-    __HAL_RCC_DMA2_CLK_ENABLE()
-    ;
-
-    /* DMA interrupt init */
-    /* DMA1_Channel2_IRQn interrupt configuration */
-    HAL_NVIC_SetPriority(DMA1_Channel2_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(DMA1_Channel2_IRQn);
-    /* DMA1_Channel4_IRQn interrupt configuration */
-    HAL_NVIC_SetPriority(DMA1_Channel4_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(DMA1_Channel4_IRQn);
-    /* DMA2_Channel4_5_IRQn interrupt configuration */
-    HAL_NVIC_SetPriority(DMA2_Channel4_5_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(DMA2_Channel4_5_IRQn);
-    hdma_uart4_tx.rs485FlowControlFunction = &dma_trancieve_callback;
 
     }
 

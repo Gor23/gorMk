@@ -160,6 +160,11 @@ void Wifi_parser(void)
 	    Wifi_string_copy(connected, (char*) &eventData.eventMessage,
 		    MAX_EVENT_STRING_SIZE);
 	    }
+	else if (strstr(ptrWifiRecieveBuffer, connected))
+	    {
+	    Wifi_string_copy(noEvents, (char*) &eventData.eventMessage,
+		    MAX_EVENT_STRING_SIZE);
+	    }
 	}
 
     memset(wifiRecieveBuffer, 0x00, WIFI_RECIEVE_ARRAY_SIZE);
@@ -297,4 +302,12 @@ void uart2_start_recieve_trigger(uint8_t isNeedTurnOn)
 	{
 	htim6.Instance->CR1 |= TIM_CR1_CEN;
 	}
+    }
+
+void Wifi_init ()
+    {
+    MX_USART2_UART_Init();
+    MX_TIM6_Init();
+    USER_UART_Recieve_INIT(&huart2, (uint8_t*) wifiRecieveBuffer,
+    WIFI_RECIEVE_ARRAY_SIZE);
     }
