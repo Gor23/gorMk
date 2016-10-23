@@ -160,6 +160,11 @@ void Wifi_parser(void)
 	    Wifi_string_copy(connected, (char*) &eventData.eventMessage,
 		    MAX_EVENT_STRING_SIZE);
 	    }
+	else if (strstr(ptrWifiRecieveBuffer, connected))
+	    {
+	    Wifi_string_copy(noEvents, (char*) &eventData.eventMessage,
+		    MAX_EVENT_STRING_SIZE);
+	    }
 	}
 
     memset(wifiRecieveBuffer, 0x00, WIFI_RECIEVE_ARRAY_SIZE);

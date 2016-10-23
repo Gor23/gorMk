@@ -23,6 +23,8 @@
 extern char wifiRecieveBuffer [WIFI_RECIEVE_ARRAY_SIZE];
 extern uint8_t wifiFlags;
 
+
+
 //////////pererph init/////////
 void MX_USART2_UART_Init (void);
 void MX_TIM6_Init (void);

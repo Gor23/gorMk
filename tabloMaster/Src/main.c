@@ -104,7 +104,7 @@ int main(void)
 //  MX_TIM1_Init();
     Wifi_init();
     Video_init();
-//    MX_USART1_UART_Init();
+//  MX_USART1_UART_Init();
 //  MX_TIM7_Init();
 
     uint8_t init_array[] =
@@ -114,21 +114,16 @@ int main(void)
 
     Text testString;
     Text logoString;
-    Text score;
+
     Text teams;
     imageGif logoGif;
     imageGif winerGif;
 
     uint8_t systemMesageBuff[SYSTEM_TEXT_BUF_SIZE];
-    uint8_t stringBuff[STRING_BUF_SIZE];
-    uint8_t scoreString[MAX_EVENT_STRING_SCORE_SIZE * 2];
     uint8_t teamsString[MAX_EVENT_STRING_SIZE * 2];
 
-    uint8_t imageMode = SCORE_MODE;
+    uint8_t imageMode = LOGO_MODE;
     uint32_t ticks = 40;
-
-    char *ptr_char0;
-    char *ptr = NULL;
 
     ///////////////////// set buffer an images properties
     //footballForm.formImage
@@ -157,13 +152,12 @@ int main(void)
 
     testString.xOffset = 0;
     testString.yOffset = 1;
-    // testString.stringPtr = "EVENTS";
     testString.stringPtr = "WWW.EVENTSSION.COM // WWW.EVENTSSION.COM";
     testString.stringShift = 0;
     testString.visibleRightEdge = 128;
 
     logoString.xOffset = 56;
-    logoString.yOffset = 2;
+    logoString.yOffset = 1;
     logoString.stringPtr = &eventData.eventMessage;
     logoString.stringShift = 0;
     logoString.visibleRightEdge = 128;
@@ -174,15 +168,6 @@ int main(void)
     teams.stringShift = 0;
     teams.visibleRightEdge = 128;
 
-    score.xOffset = 18;
-    score.yOffset = 0;
-    score.stringPtr = scoreString;
-    score.stringShift = 0;
-    score.visibleRightEdge = 128;
-
-    ///////////////////////////
-
-    memset(stringBuff, 0x00, STRING_BUF_SIZE);
 //   HAL_TIM_Base_Start_IT(&htim6);
     /* USER CODE END 2 */
 
@@ -326,7 +311,7 @@ int main(void)
 		timerStopValue = 250;
 		Video_put_gif(&logoGif, false);
 
-		Video_put_string(&logoString, Font_array);
+		Video_put_string(&logoString, FontSmall_array);
 
 		break;
 
@@ -334,7 +319,7 @@ int main(void)
 		timerStopValue = 70;
 		if (Video_put_gif(&goalGifStruct, false) == 'S')
 		    {
-		    imageMode = SCORE_MODE;
+		    imageMode = SIMPLE_SCORE_MODE;
 		    ticks = 20;
 		    }
 		break;
@@ -343,32 +328,19 @@ int main(void)
 		timerStopValue = 70;
 		if (Video_put_gif(&pointGifStruct, true) == 'S')
 		    {
-		    imageMode = SCORE_MODE;
+		    imageMode = EXT_SCORE_MODE;
 		    ticks = 20;
 		    }
 		break;
 
-	    case SCORE_MODE:
+	    case SIMPLE_SCORE_MODE:
 		timerStopValue = 400;
-//		memset(scoreString, 0x00, MAX_EVENT_STRING_SCORE_SIZE * 2);
-//		memset(teamsString, 0x00, MAX_EVENT_STRING_SIZE * 2);
-//		sprintf((char*) scoreString, "%s:%s", (char*) &gameData.firstTeamScore,
-//			(char*) &gameData.secondTeamScore);
-//		Video_put_string(&score, Font2_array);
-//
-//		sprintf((char*) teamsString, "%s - %s", (char*) &gameData.firstTeam, (char*) &gameData.secondTeam);
-//
-//		Video_put_string(&teams, Font_array);
-
 		Event_set_n_display_score(SIMPLE_FORM);
+		break;
 
-//		ticks--;
-//
-//		if (!ticks)
-//		    {
-//		    imageMode = LOGO_MODE;
-//		    ticks = 80;
-//		    }
+	    case EXT_SCORE_MODE:
+		timerStopValue = 400;
+		Event_set_n_display_score(EXTENDED_FORM);
 		break;
 
 	    case WINNER_MODE:
@@ -429,7 +401,7 @@ int main(void)
 		    }
 		if (strstr((char*) &gameData.actionType, "UPDATE"))
 		    {
-		    imageMode = SCORE_MODE;
+		    imageMode = SIMPLE_SCORE_MODE;
 		    }
 		}
 	    if (strstr((char*) &eventData.eventType, "TENNIS"))
@@ -440,7 +412,18 @@ int main(void)
 		    }
 		if (strstr((char*) &gameData.actionType, "UPDATE"))
 		    {
-		    imageMode = SCORE_MODE;
+		    imageMode = EXT_SCORE_MODE;
+		    }
+		}
+	    if (strstr((char*) &eventData.eventType, "BASKETBALL"))
+		{
+		if (strstr((char*) &gameData.actionType, "GOAL"))
+		    {
+		    imageMode = SIMPLE_SCORE_MODE;		//TODO add animation
+		    }
+		if (strstr((char*) &gameData.actionType, "UPDATE"))
+		    {
+		    imageMode = SIMPLE_SCORE_MODE;
 		    }
 		}
 	    if (strstr((char*) &gameData.actionType, "WINNER"))
@@ -451,7 +434,11 @@ int main(void)
 		{
 		imageMode = STRING_MODE;
 		}
-
+	    if (strstr((char*) &eventData.eventMessage, "NO_EVENTS"))
+		{
+		memset(&eventData.eventMessage, 0x00, MAX_EVENT_STRING_SIZE);
+		imageMode = LOGO_MODE;
+		}
 	    }
 	/* USER CODE END WHILE */
 

@@ -295,30 +295,45 @@ uint8_t Video_put_gif(imageGif *imgPtr, uint8_t invertFlag)
 
 void Video_put_form(ScoreForm *form, FormType type)
     {
-    Video_put_string(&form->scoreDevider, Font2_array);
-    Video_align_for_right_side(&form->firstTeamScore, Font2_array);
-    Video_put_string(&form->firstTeamScore, Font2_array);
-    Video_put_string(&form->secondTeamScore, Font2_array);
 
-    Video_put_string(&form->teamDevider, Font_array);
-    Video_align_for_right_side(&form->firsTeamName, Font_array);
-    Video_put_string(&form->firsTeamName, Font_array);
-    Video_put_string(&form->secondTeamName, Font_array);
-
-    if (type == EXTENDED_FORM)
+    if (type == SIMPLE_FORM)
 	{
-	Video_put_string(&form->firstTeamAdditional, Font_array);
-	Video_put_string(&form->secondTeamAdditional, Font_array);
+	Video_put_string(&form->scoreDevider, Font2_array);
+	Video_align_for_right_side(&form->firstTeamScore, Font2_array);
+	Video_put_string(&form->firstTeamScore, Font2_array);
+	Video_put_string(&form->secondTeamScore, Font2_array);
+
+	Video_put_string(&form->teamDevider, FontSmall_array);
+	Video_align_for_right_side(&form->firsTeamName, FontSmall_array);
+	Video_put_string(&form->firsTeamName, FontSmall_array);
+	Video_put_string(&form->secondTeamName, FontSmall_array);
+	}
+
+    else if (type == EXTENDED_FORM)
+	{
+	Video_put_string(&form->scoreDevider, Font_array);
+	Video_align_for_right_side(&form->firstTeamScore, Font_array);
+	Video_put_string(&form->firstTeamScore, Font_array);
+	Video_put_string(&form->secondTeamScore, Font_array);
+
+	Video_put_string(&form->teamDevider, FontSmall_array);
+	Video_align_for_right_side(&form->firsTeamName, FontSmall_array);
+	Video_put_string(&form->firsTeamName, FontSmall_array);
+	Video_put_string(&form->secondTeamName, FontSmall_array);
+
+	Video_put_string(&form->firstTeamAdditional, FontSmall_array);
+	Video_align_for_right_side(&form->secondTeamAdditional, FontSmall_array);
+	Video_put_string(&form->secondTeamAdditional, FontSmall_array);
 	}
     }
 
-void Video_align_for_right_side(Text *text,  const tChar *fonts)
+void Video_align_for_right_side(Text *text, const tChar *fonts)
     {
     uint8_t asciCode;
     text->xOffset = text->visibleRightEdge;
-    for (uint8_t i; i<strlen((char*)text->stringPtr); i++)
+    for (uint8_t i; i < strlen((char*) text->stringPtr); i++)
 	{
-	if (text->xOffset<text->visibleLeftEdge)
+	if (text->xOffset < text->visibleLeftEdge)
 	    {
 	    return;
 	    }
@@ -354,7 +369,7 @@ void Video_send_init_to_display(uint8_t *comandPtr, uint16_t size)
     HAL_UART_Transmit_IT(&huart4, (uint8_t*) comandPtr, size);
     }
 
-char *Video_get_answer (void)
+char *Video_get_answer(void)
     {
     return strstr((char*) uartRecieveBuffer, "0123");
     }
