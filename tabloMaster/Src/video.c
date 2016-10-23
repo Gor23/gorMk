@@ -7,6 +7,7 @@
  */
 
 #include "video.h"
+#include "string.h"
 
 UART_HandleTypeDef huart4;
 DMA_HandleTypeDef hdma_uart4_tx;
@@ -295,10 +296,12 @@ uint8_t Video_put_gif(imageGif *imgPtr, uint8_t invertFlag)
 void Video_put_form(ScoreForm *form, FormType type)
     {
     Video_put_string(&form->scoreDevider, Font2_array);
+    Video_align_for_right_side(&form->firstTeamScore, Font2_array);
     Video_put_string(&form->firstTeamScore, Font2_array);
     Video_put_string(&form->secondTeamScore, Font2_array);
 
     Video_put_string(&form->teamDevider, Font_array);
+    Video_align_for_right_side(&form->firsTeamName, Font_array);
     Video_put_string(&form->firsTeamName, Font_array);
     Video_put_string(&form->secondTeamName, Font_array);
 
@@ -309,7 +312,28 @@ void Video_put_form(ScoreForm *form, FormType type)
 	}
     }
 
-//void Video_align_for_left_side(Text)
+void Video_align_for_right_side(Text *text,  const tChar *fonts)
+    {
+    uint8_t asciCode;
+    text->xOffset = text->visibleRightEdge;
+    for (uint8_t i; i<strlen((char*)text->stringPtr); i++)
+	{
+	if (text->xOffset<text->visibleLeftEdge)
+	    {
+	    return;
+	    }
+	asciCode = text->stringPtr[i];
+
+	if (asciCode > 0x7D)
+	    {
+	    //asciCode -= RUS_ARRAY_OFFSRET;
+	    asciCode -= 1;
+	    }
+	asciCode -= ARRAY_SYMBOLS_OFFSET;
+
+	text->xOffset -= fonts[asciCode].image->width;
+	}
+    }
 
 void Video_send_data_to_display(void)
     {

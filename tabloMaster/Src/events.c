@@ -37,6 +37,7 @@ void Event_set_n_display_score(FormType type)
 	{
     case SIMPLE_FORM:
 	scoreForm.firsTeamName.xOffset = FIRST_TEAM_NAME_X_OFFSET;
+	scoreForm.firsTeamName.visibleLeftEdge = 0;
 	scoreForm.firsTeamName.yOffset = TEAM_NAME_Y_OFFSET;
 	scoreForm.firsTeamName.stringShift = 0;
 	scoreForm.firsTeamName.visibleRightEdge = FIRST_TEAM_NAME_RIGHT_VISIBLE_EDGE;
