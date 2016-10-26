@@ -66,7 +66,7 @@ typedef struct
 typedef struct
     {
 
-	uint8_t eventType[MAX_EVENT_STRING_SIZE];
+	EventType eventType;
 	uint8_t eventMessage[MAX_EVENT_STRING_SIZE];
 
     } EventData;

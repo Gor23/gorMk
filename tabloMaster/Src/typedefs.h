@@ -79,5 +79,31 @@ typedef enum
     EXTENDED_FORM
     } FormType;
 
+typedef enum
+    {
+    FOOTBALL,
+    TENNIS,
+    BASKETBALL,
+    HOCKEY
+    } GameType;
+
+    typedef enum
+    {
+	GOAL,
+	UPDATE,
+	POINT
+    }ActionType;
+
+    typedef enum
+    {
+	UNDEFINED,
+	SYSTEM,
+	GAME,
+	WINNER,
+	MESSAGE,
+	HIDDEN
+    }EventType;
+
+
 
 #endif /* TYPEDEFS_H_ */

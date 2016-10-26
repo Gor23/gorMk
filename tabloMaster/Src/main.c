@@ -356,7 +356,7 @@ int main(void)
 //		    mainBuffer.bufferArrayPtr[i+START_POSITION] = 0;
 //		    }
 
-		Video_put_string(&teams, FontSmall_array);
+		//Video_put_string(&teams, FontSmall_array);
 
 //		ticks--;
 //		if (!ticks)
@@ -391,69 +391,74 @@ int main(void)
 	if (wifiFlags & (1 << DATA_UPDATE))
 	    {
 	    Wifi_parser();
-
-	    if (strstr((char*) &eventData.eventType, "FOOTBALL"))
+	    switch (eventData.eventType)
 		{
-		if (strstr((char*) &gameData.actionType, "GOAL"))
+	    case GAME:
+		if (strstr((char*) &eventData.eventType, "FOOTBALL"))
 		    {
-		    imageMode = GOAL_MODE;
+		    if (strstr((char*) &gameData.actionType, "GOAL"))
+			{
+			imageMode = GOAL_MODE;
+			}
+		    if (strstr((char*) &gameData.actionType, "UPDATE"))
+			{
+			imageMode = SIMPLE_SCORE_MODE;
+			}
 		    }
-		if (strstr((char*) &gameData.actionType, "UPDATE"))
+		else if (strstr((char*) &eventData.eventType, "TENNIS"))
 		    {
-		    imageMode = SIMPLE_SCORE_MODE;
+		    if (strstr((char*) &gameData.actionType, "POINT"))
+			{
+			imageMode = POINT_MODE;
+			}
+		    if (strstr((char*) &gameData.actionType, "UPDATE"))
+			{
+			imageMode = EXT_SCORE_MODE;
+			}
 		    }
-		}
-	    else if (strstr((char*) &eventData.eventType, "TENNIS"))
-		{
-		if (strstr((char*) &gameData.actionType, "POINT"))
+		else if (strstr((char*) &eventData.eventType, "BASKETBALL"))
 		    {
-		    imageMode = POINT_MODE;
+		    if (strstr((char*) &gameData.actionType, "GOAL"))
+			{
+			imageMode = SIMPLE_SCORE_MODE;		//TODO add animation
+			}
+		    if (strstr((char*) &gameData.actionType, "UPDATE"))
+			{
+			imageMode = SIMPLE_SCORE_MODE;
+			}
 		    }
-		if (strstr((char*) &gameData.actionType, "UPDATE"))
-		    {
-		    imageMode = EXT_SCORE_MODE;
-		    }
-		}
-	    else if (strstr((char*) &eventData.eventType, "BASKETBALL"))
-		{
-		if (strstr((char*) &gameData.actionType, "GOAL"))
-		    {
-		    imageMode = SIMPLE_SCORE_MODE;		//TODO add animation
-		    }
-		if (strstr((char*) &gameData.actionType, "UPDATE"))
-		    {
-		    imageMode = SIMPLE_SCORE_MODE;
-		    }
-		}
-	    else if (strstr((char*) &gameData.actionType, "WINNER"))
-		{
+		break;
+	    case WINNER:
 		imageMode = WINNER_MODE;
-		sprintf((char*) teamsString, "%s:%s", (char*) &gameData.firstTeam, (char*) &gameData.firstTeamScore);
-		}
-	    else if (strstr((char*) &eventData.eventType, "MESSAGE"))
-		{
+		//sprintf((char*) teamsString, "%s:%s", (char*) &gameData.firstTeam, (char*) &gameData.firstTeamScore);
+		//sprintf((char*) teamsString, " ");
+		break;
+
+	    case MESSAGE:
 		imageMode = STRING_MODE;
-		}
-	    else if (strstr((char*) &eventData.eventMessage, "NO_EVENTS"))
-		{
-		memset(&eventData.eventMessage, 0x00, MAX_EVENT_STRING_SIZE);
+		testString.stringPtr = eventData.eventMessage;
+		break;
+
+	    case SYSTEM:
 		imageMode = LOGO_MODE;
+		break;
+
+	    case HIDDEN:
+		break;
+
+	    default:
+		break;
+
 		}
-	    else if (strstr((char*) &eventData.eventType, "SYSTEM"))
-		{
-		imageMode = LOGO_MODE;
-		}
+	    /* USER CODE END WHILE */
+
+	    /* USER CODE BEGIN 3 */
 
 	    }
-	/* USER CODE END WHILE */
-
-	/* USER CODE BEGIN 3 */
+	/* USER CODE END 3 */
 
 	}
-    /* USER CODE END 3 */
-
     }
-
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
@@ -622,7 +627,7 @@ static void MX_USART1_UART_Init(void)
 
     }
 
-/** Configure pins as 
+/** Configure pins as
  * Analog
  * Input
  * Output

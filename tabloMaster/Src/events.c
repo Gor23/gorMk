@@ -28,7 +28,7 @@ void Events_clear_strings_game_data(void)
 void Events_clear_strings_event_data(void)
     {
     memset(&eventData.eventMessage, 0, MAX_EVENT_STRING_SIZE);
-    memset(&eventData.eventType, 0, MAX_EVENT_STRING_SIZE);
+    eventData.eventType = UNDEFINED;
     }
 
 void Event_set_n_display_score(FormType type)
