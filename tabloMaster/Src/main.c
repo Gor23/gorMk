@@ -77,12 +77,12 @@ static void MX_TIM7_Init(void);
 
 volatile uint32_t timer1;
 volatile uint32_t timer2;
+volatile uint32_t answerTimer;
 volatile uint16_t driverTimer = 0;
 volatile uint16_t timerStopValue = 100;
 volatile uint8_t ready = 0;
 volatile uint8_t dmaSend = 0;
 
-uint8_t answerOk = 0;
 /* USER CODE END PFP */
 
 int main(void)
@@ -279,8 +279,20 @@ int main(void)
 	    HAL_Delay(3);
 	    Video_cmd((uint8_t*) "BUFC\n", strlen("BUFC\n"));
 	    HAL_Delay(4);
-	    while (!Video_get_answer())
+	    answerTimer = 0;
+	    while (!Video_get_answer()||(answerTimer<ANSWER_TIMER_STOP_VALUE))
 		{
+		}
+	    if (answerTimer>=ANSWER_TIMER_STOP_VALUE)
+		{
+		HAL_Delay(700);
+		Video_send_init_to_display(init_array, sizeof(init_array));
+		HAL_Delay(50);
+	    }
+	    else
+		{
+		Video_send_data_to_display();
+		dmaSend = 1;
 		}
 	    Video_clear_recieve_buffer();
 	    // USER_UART_clear_rx(&huart2);
@@ -293,9 +305,9 @@ int main(void)
 	    // Video_change_buffers(&mainBuffer, videoBuffer, videoBufferSec);
 	    //	answerOk = 1;
 	    //HAL_UART_Transmit_DMA(&huart2, (uint8_t*)&lcd_image_mas, TRANCIEVE_ARRAY_SIZE);
-	    Video_send_data_to_display();
+
 	    // }
-	    dmaSend = 1;
+
 	    ready = 0;
 	    timer1 = 0;
 	    }

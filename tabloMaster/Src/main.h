@@ -32,6 +32,7 @@
 
 #define TIMER_1_STOP_VALUE	100
 #define TIMER_2_STOP_VALUE	200
+#define ANSWER_TIMER_STOP_VALUE	20
 
 #define	HUART4_RECIEVE_TIMEOUT 70
 
@@ -47,6 +48,7 @@ enum driverStatus {
 
 extern volatile uint32_t timer1;
 extern volatile uint32_t timer2;
+extern volatile uint32_t answerTimer;
 extern volatile uint16_t driverTimer;
 extern volatile uint16_t timerStopValue;
 extern volatile uint8_t ready;
