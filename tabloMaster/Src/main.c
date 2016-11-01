@@ -280,9 +280,9 @@ int main(void)
 	    Video_cmd((uint8_t*) "BUFC\n", strlen("BUFC\n"));
 	    HAL_Delay(4);
 	    answerTimer = 0;
-	    while (!Video_get_answer()||(answerTimer<ANSWER_TIMER_STOP_VALUE))
-		{
-		}
+//	    while (!Video_get_answer()||(answerTimer<ANSWER_TIMER_STOP_VALUE))
+//		{
+//		}
 	    if (answerTimer>=ANSWER_TIMER_STOP_VALUE)
 		{
 		HAL_Delay(700);
@@ -406,7 +406,7 @@ int main(void)
 	    switch (eventData.eventType)
 		{
 	    case GAME:
-		if (strstr((char*) &eventData.eventType, "FOOTBALL"))
+		if (strstr((char*) &gameData.gameType, "FOOTBALL"))
 		    {
 		    if (strstr((char*) &gameData.actionType, "GOAL"))
 			{
@@ -417,7 +417,7 @@ int main(void)
 			imageMode = SIMPLE_SCORE_MODE;
 			}
 		    }
-		else if (strstr((char*) &eventData.eventType, "TENNIS"))
+		else if (strstr((char*) &gameData.gameType, "TENNIS"))
 		    {
 		    if (strstr((char*) &gameData.actionType, "POINT"))
 			{
@@ -428,7 +428,7 @@ int main(void)
 			imageMode = EXT_SCORE_MODE;
 			}
 		    }
-		else if (strstr((char*) &eventData.eventType, "BASKETBALL"))
+		else if (strstr((char*) &gameData.gameType, "BASKETBALL"))
 		    {
 		    if (strstr((char*) &gameData.actionType, "GOAL"))
 			{

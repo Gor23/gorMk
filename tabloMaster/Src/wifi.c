@@ -71,7 +71,7 @@ void Wifi_parser(void)
     Events_clear_strings_event_data();
     Wifi_null_removing();
 
-    if (Wifi_parser_get_value(type, MAX_EVENT_STRING_SIZE, (char*) &eventData.eventType))
+    if (Wifi_parser_get_value(type, MAX_EVENT_STRING_SIZE, (char*) &gameData.gameType))
 	{
 	eventData.eventType = GAME;
 	Wifi_parser_get_value(actionType, MAX_EVENT_STRING_SIZE, (char*) &gameData.actionType);
@@ -228,6 +228,7 @@ void Wifi_parser_remove_first_and_last(char *arrayPtr)
 	if (arrayPtr[i] == '"')
 	    {
 	    arrayPtr[i] = 0;
+	    arrayPtr[i+1] = 0;
 	    break;
 	    }
 	}

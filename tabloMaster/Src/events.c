@@ -16,6 +16,7 @@ ScoreForm scoreForm;
 
 void Events_clear_strings_game_data(void)
     {
+    memset(&gameData.gameType, 0, MAX_EVENT_STRING_SIZE);
     memset(&gameData.firstTeam, 0, MAX_EVENT_STRING_SIZE);
     memset(&gameData.secondTeam, 0, MAX_EVENT_STRING_SIZE);
     memset(&gameData.actionType, 0, MAX_EVENT_STRING_SIZE);

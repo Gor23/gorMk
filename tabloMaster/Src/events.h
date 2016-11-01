@@ -52,7 +52,7 @@
 
 typedef struct
     {
-
+	uint8_t gameType[MAX_EVENT_STRING_SIZE];
 	uint8_t firstTeam[MAX_EVENT_STRING_SIZE];
 	uint8_t secondTeam[MAX_EVENT_STRING_SIZE];
 	uint8_t actionType[MAX_EVENT_STRING_SIZE];
