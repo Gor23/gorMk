@@ -280,9 +280,9 @@ int main(void)
 	    Video_cmd((uint8_t*) "BUFC\n", strlen("BUFC\n"));
 	    HAL_Delay(4);
 	    answerTimer = 0;
-//	    while (!Video_get_answer()||(answerTimer<ANSWER_TIMER_STOP_VALUE))
-//		{
-//		}
+	    while (!Video_get_answer()||(answerTimer<ANSWER_TIMER_STOP_VALUE))
+		{
+		}
 	    if (answerTimer>=ANSWER_TIMER_STOP_VALUE)
 		{
 		HAL_Delay(700);
