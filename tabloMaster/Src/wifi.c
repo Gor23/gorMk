@@ -67,13 +67,14 @@ void Wifi_null_removing()
 
 void Wifi_parser(void)
     {
-    Events_clear_strings_game_data();
     Events_clear_strings_event_data();
     Wifi_null_removing();
 
     if (Wifi_parser_get_value(type, MAX_EVENT_STRING_SIZE, (char*) &gameData.gameType))
 	{
+	Events_clear_strings_game_data();
 	eventData.eventType = GAME;
+	Wifi_parser_get_value(type, MAX_EVENT_STRING_SIZE, (char*) &gameData.gameType);
 	Wifi_parser_get_value(actionType, MAX_EVENT_STRING_SIZE, (char*) &gameData.actionType);
 	Wifi_parser_get_value(firstTeamName, MAX_EVENT_STRING_SIZE, (char*) &gameData.firstTeam);
 	Wifi_parser_get_value(secondTeamName, MAX_EVENT_STRING_SIZE, (char*) &gameData.secondTeam);
@@ -87,12 +88,14 @@ void Wifi_parser(void)
 
     else if (strstr(ptrWifiRecieveBuffer, "WINNER"))
 	{
+	Events_clear_strings_game_data();
 	eventData.eventType = WINNER;
 	Wifi_parser_get_value(winnerTeamName, MAX_EVENT_STRING_SIZE, (char*) &gameData.firstTeam);
 	Wifi_parser_get_value(score, MAX_EVENT_STRING_SIZE, (char*) &gameData.firstTeamScore);
 	}
     else if (strstr(ptrWifiRecieveBuffer, customMessage))
 	{
+	Events_clear_strings_game_data();
 	eventData.eventType = MESSAGE;
 	Wifi_parser_get_value(messageBody, MAX_EVENT_STRING_SIZE, (char*) &eventData.eventMessage);
 	}
