@@ -101,7 +101,8 @@ typedef enum
 	GAME,
 	WINNER,
 	MESSAGE,
-	HIDDEN
+	HIDDEN,
+	TIME
     }EventType;
 
 

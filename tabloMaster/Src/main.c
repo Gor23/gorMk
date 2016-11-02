@@ -82,6 +82,7 @@ volatile uint16_t driverTimer = 0;
 volatile uint16_t timerStopValue = 100;
 volatile uint8_t ready = 0;
 volatile uint8_t dmaSend = 0;
+uint8_t timeCount = 0;
 
 /* USER CODE END PFP */
 
@@ -280,15 +281,15 @@ int main(void)
 	    Video_cmd((uint8_t*) "BUFC\n", strlen("BUFC\n"));
 	    HAL_Delay(4);
 	    answerTimer = 0;
-	    while (!Video_get_answer()&&(answerTimer<ANSWER_TIMER_STOP_VALUE))
+	    while (!Video_get_answer() && (answerTimer < ANSWER_TIMER_STOP_VALUE))
 		{
 		}
-	    if (answerTimer>=ANSWER_TIMER_STOP_VALUE)
+	    if (answerTimer >= ANSWER_TIMER_STOP_VALUE)
 		{
 		HAL_Delay(700);
 		Video_send_init_to_display(init_array, sizeof(init_array));
 		HAL_Delay(50);
-	    }
+		}
 	    else
 		{
 		Video_send_data_to_display();
@@ -306,9 +307,7 @@ int main(void)
 	    // Video_change_buffers(&mainBuffer, videoBuffer, videoBufferSec);
 	    //	answerOk = 1;
 	    //HAL_UART_Transmit_DMA(&huart2, (uint8_t*)&lcd_image_mas, TRANCIEVE_ARRAY_SIZE);
-
 	    // }
-
 	    ready = 0;
 	    timer1 = 0;
 	    }
@@ -324,7 +323,19 @@ int main(void)
 		timerStopValue = 250;
 		Video_put_gif(&logoGif, false);
 
-		Video_put_string(&logoString, FontSmall_array);
+		if (eventData.eventType == TIME)
+		    {
+		    Events_time_tick(logoString.stringPtr);
+		    logoString.yOffset = 2;
+		    logoString.xOffset = 65;
+		    Video_put_string(&logoString, Font3_array);
+		    }
+		else
+		    {
+		    logoString.yOffset = 1;
+		    logoString.xOffset = 56;
+		    Video_put_string(&logoString, FontSmall_array);
+		    }
 
 		break;
 
@@ -453,6 +464,10 @@ int main(void)
 		break;
 
 	    case SYSTEM:
+		imageMode = LOGO_MODE;
+		break;
+
+	    case TIME:
 		imageMode = LOGO_MODE;
 		break;
 

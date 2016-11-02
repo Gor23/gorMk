@@ -24,6 +24,7 @@ typedef struct
    const tImage *image;
  } tChar;
 
+extern const tChar Font3_array[];
 extern const tChar Font_array[];
 extern const tChar Font2_array[];
 extern const tChar FontSmall_array[];

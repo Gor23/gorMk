@@ -79,5 +79,6 @@ extern EventData eventData;
 void Events_clear_strings_game_data(void);
 void Events_clear_strings_event_data(void);
 void Event_set_n_display_score(FormType type);
+void Events_time_tick(uint8_t* strPtr);
 
 #endif /* EVENTS_H_ */

@@ -134,5 +134,24 @@ void Event_set_n_display_score(FormType type)
 	}
     }
 
+void Events_time_tick(uint8_t* strPtr)
+    {
+    static uint8_t timeCount;
+    if (timeCount<4)
+	{
+	timeCount++;
+	strPtr[2]=':';
+	}
+    else if (timeCount<7)
+	{
+	timeCount++;
+	strPtr[2]=' ';
+	}
+    else
+	{
+	timeCount=0;
+	}
+    }
+
 //void Events_put_commands_names()
 
