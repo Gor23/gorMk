@@ -1,7 +1,7 @@
 /*
  * typedefs.h
  *
- *  Created on: 23 окт. 2016 г.
+ *  Created on: 23 пїЅпїЅпїЅ. 2016 пїЅ.
  *      Author: IGOR
  */
 
@@ -105,6 +105,11 @@ typedef enum
 	TIME
     }EventType;
 
+    typedef enum
+    {
+    SYSTEM_LOGO,
+	TIME_LOGO
+    }LogoType;
 
 
 #endif /* TYPEDEFS_H_ */

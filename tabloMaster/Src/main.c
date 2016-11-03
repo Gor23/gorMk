@@ -40,6 +40,7 @@
 #include "images.h"
 #include "wifi.h"
 #include "events.h"
+#include "typedefs.h"
 
 /* USER CODE END Includes */
 
@@ -82,7 +83,7 @@ volatile uint16_t driverTimer = 0;
 volatile uint16_t timerStopValue = 100;
 volatile uint8_t ready = 0;
 volatile uint8_t dmaSend = 0;
-uint8_t timeCount = 0;
+LogoType logoType = SYSTEM_LOGO;
 
 /* USER CODE END PFP */
 
@@ -116,7 +117,6 @@ int main(void)
     Text testString;
     Text logoString;
 
-    Text teams;
     imageGif logoGif;
     imageGif winerGif;
 
@@ -162,12 +162,6 @@ int main(void)
     logoString.stringPtr = &eventData.eventMessage;
     logoString.stringShift = 0;
     logoString.visibleRightEdge = 128;
-
-    teams.xOffset = 0;
-    teams.yOffset = 6;
-    teams.stringPtr = teamsString;
-    teams.stringShift = 0;
-    teams.visibleRightEdge = 128;
 
 //   HAL_TIM_Base_Start_IT(&htim6);
     /* USER CODE END 2 */
@@ -234,7 +228,7 @@ int main(void)
 //		      driverTimer = 500;
 //		      videoDriverStatus = INIT;
 //		    }
-//		  //виждать и отправить инит пакет
+//		  //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 //		}
 //	      break;
 //
@@ -323,7 +317,7 @@ int main(void)
 		timerStopValue = 250;
 		Video_put_gif(&logoGif, false);
 
-		if (eventData.eventType == TIME)
+		if (logoType == TIME_LOGO)
 		    {
 		    Events_time_tick(logoString.stringPtr);
 		    logoString.yOffset = 2;
@@ -464,10 +458,12 @@ int main(void)
 		break;
 
 	    case SYSTEM:
+	    logoType = SYSTEM_LOGO;
 		imageMode = LOGO_MODE;
 		break;
 
 	    case TIME:
+	    logoType = TIME_LOGO;
 		imageMode = LOGO_MODE;
 		break;
 
