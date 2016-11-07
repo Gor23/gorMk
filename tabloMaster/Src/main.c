@@ -116,6 +116,7 @@ int main(void)
 
     Text testString;
     Text logoString;
+    Text winnerMessage;
 
     imageGif logoGif;
     imageGif winerGif;
@@ -156,6 +157,13 @@ int main(void)
     testString.stringPtr = "WWW.EVENTSSION.COM // WWW.EVENTSSION.COM";
     testString.stringShift = 0;
     testString.visibleRightEdge = 128;
+
+    winnerMessage.xOffset = 0;
+    winnerMessage.yOffset = 6;
+    winnerMessage.stringPtr = teamsString;
+    winnerMessage.stringShift = 0;
+    winnerMessage.visibleRightEdge = 128;
+
 
     logoString.xOffset = 56;
     logoString.yOffset = 1;
@@ -367,21 +375,16 @@ int main(void)
 		Video_put_gif(&winerGif, true);
 
 		///clear down row////////
-//#define START_POSITION	896
-//#define END_POSITION	1024
-//		for(uint16_t i = 0; i<END_POSITION; i++)
-//		    {
-//		    mainBuffer.bufferArrayPtr[i+START_POSITION] = 0;
-//		    }
+		Video_clear_down();
 
-		//Video_put_string(&teams, FontSmall_array);
+		Video_put_string(&winnerMessage, FontSmall_array);
 
-//		ticks--;
-//		if (!ticks)
-//		    {
-//		    imageMode = LOGO_MODE;
-//		    ticks = 500;
-//		    }
+		ticks--;
+		if (!ticks)
+		    {
+		    imageMode = LOGO_MODE;
+		    ticks = 500;
+		    }
 		break;
 
 	    case STRING_MODE:
@@ -448,7 +451,8 @@ int main(void)
 		break;
 	    case WINNER:
 		imageMode = WINNER_MODE;
-		//sprintf((char*) teamsString, "%s:%s", (char*) &gameData.firstTeam, (char*) &gameData.firstTeamScore);
+		//TODO clean?
+		sprintf((char*) teamsString, "%s %s", "Победитель", (char*) &gameData.firstTeamScore);
 		//sprintf((char*) teamsString, " ");
 		break;
 

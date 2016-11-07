@@ -2,7 +2,7 @@
  * strings.c
 
  *
- *  Created on: 1 июля 2016 г.
+ *  Created on: 1 пїЅпїЅпїЅпїЅ 2016 пїЅ.
  *      Author: lihodey_i
  */
 
@@ -349,6 +349,16 @@ void Video_align_for_right_side(Text *text, const tChar *fonts)
 	text->xOffset -= fonts[asciCode].image->width;
 	}
     }
+
+void Video_clear_down (void)
+{
+#define START_POSITION	896
+#define END_POSITION	1024
+		for(uint16_t i = 0; i<END_POSITION; i++)
+		    {
+		    mainBuffer.bufferArrayPtr[i+START_POSITION] = 0;
+		    }
+}
 
 void Video_send_data_to_display(void)
     {

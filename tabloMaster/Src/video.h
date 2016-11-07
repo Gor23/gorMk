@@ -1,7 +1,7 @@
 /*
  * strings.h
  *
- *  Created on: 1 июля 2016 г.
+ *  Created on: 1 пїЅпїЅпїЅпїЅ 2016 пїЅ.
  *      Author: lihodey_i
  */
 
@@ -41,5 +41,6 @@ char *Video_get_answer (void);
 void Video_clear_recieve_buffer(void);
 void Video_send_init_to_display(uint8_t *comandPtr, uint16_t size);
 void Video_align_for_right_side(Text *text,  const tChar *fonts);
+void Video_clear_down (void);
 
 #endif /* STRINGS_H_ */
