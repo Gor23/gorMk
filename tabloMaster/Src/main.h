@@ -11,6 +11,8 @@
 #include <stdint.h>
 #include "stm32f1xx_hal.h"
 
+#define FIRMWARE	"\"version\":\"1.0\""
+
 #define false 0
 #define true 1
 

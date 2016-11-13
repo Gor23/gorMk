@@ -5,7 +5,7 @@
 //char wifiRecieveArray[WIFI_RECIEVE_ARRAY_SIZE];
 
 TIM_HandleTypeDef htim6;
-UART_HandleTypeDef huart2;
+UART_HandleTypeDef huart1;
 
 const char type[] = "game_type";
 const char system[] = "SYSTEM";
@@ -33,6 +33,7 @@ const char winnerTeamName[] = "team_name";
 const char score[] = "score";
 const char customMessage[] = "custom_message";
 const char messageBody[] = "message_body";
+const char getFirmware[] = "get_firmware";
 
 char wifiRecieveBuffer[WIFI_RECIEVE_ARRAY_SIZE] =
     {
@@ -47,6 +48,10 @@ Wifi_parser_remove_first_and_last(char *arrayPtr);
 
 void Wifi_data_update(void)
     {
+    if (strstr(ptrWifiRecieveBuffer, getFirmware))
+	{
+	HAL_UART_Transmit_IT(&Wifi_uart, (uint8_t*) FIRMWARE, strlen(FIRMWARE));
+	}
     wifiFlags |= 1 << DATA_UPDATE;
     USER_UART_Recieve_STOP(&Wifi_uart);
     HAL_TIM_Base_Stop(&Wifi_timer);
@@ -310,27 +315,47 @@ void Wifi_void_function()
 
     }
 /* USART2 init function */
-void MX_USART2_UART_Init(void)
+//void MX_USART2_UART_Init(void)
+//    {
+//
+//    huart2.Instance = USART2;
+//    huart2.Init.BaudRate = 115200;
+//    huart2.Init.WordLength = UART_WORDLENGTH_8B;
+//    huart2.Init.StopBits = UART_STOPBITS_1;
+//    huart2.Init.Parity = UART_PARITY_NONE;
+//    huart2.Init.Mode = UART_MODE_TX_RX;
+//    huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+//    huart2.Init.OverSampling = UART_OVERSAMPLING_16;
+//    huart2.rs485FlowControlFunction = &Wifi_void_function;
+//    huart2.resrtTimer = &uart_start_recieve_trigger;
+//    if (HAL_UART_Init(&huart2) != HAL_OK)
+//	{
+////Error_Handler ();
+//	}
+//
+//    }
+/* USART1 init function */
+void MX_USART1_UART_Init(void)
     {
 
-    huart2.Instance = USART2;
-    huart2.Init.BaudRate = 115200;
-    huart2.Init.WordLength = UART_WORDLENGTH_8B;
-    huart2.Init.StopBits = UART_STOPBITS_1;
-    huart2.Init.Parity = UART_PARITY_NONE;
-    huart2.Init.Mode = UART_MODE_TX_RX;
-    huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-    huart2.Init.OverSampling = UART_OVERSAMPLING_16;
-    huart2.rs485FlowControlFunction = &Wifi_void_function;
-    huart2.resrtTimer = &uart2_start_recieve_trigger;
-    if (HAL_UART_Init(&huart2) != HAL_OK)
+    huart1.Instance = USART1;
+    huart1.Init.BaudRate = 115200;
+    huart1.Init.WordLength = UART_WORDLENGTH_9B;
+    huart1.Init.StopBits = UART_STOPBITS_1;
+    huart1.Init.Parity = UART_PARITY_EVEN;
+    huart1.Init.Mode = UART_MODE_TX_RX;
+    huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+    huart1.Init.OverSampling = UART_OVERSAMPLING_16;
+    huart1.rs485FlowControlFunction = &Wifi_void_function;
+    huart1.resrtTimer = &uart_start_recieve_trigger;
+    if (HAL_UART_Init(&huart1) != HAL_OK)
 	{
-//Error_Handler ();
+	//Error_Handler();
 	}
 
     }
 
-void uart2_start_recieve_trigger(uint8_t isNeedTurnOn)
+void uart_start_recieve_trigger(uint8_t isNeedTurnOn)
     {
     htim6.Instance->CNT = 0;
     if (isNeedTurnOn != 0)
@@ -341,8 +366,8 @@ void uart2_start_recieve_trigger(uint8_t isNeedTurnOn)
 
 void Wifi_init()
     {
-    MX_USART2_UART_Init();
+    MX_USART1_UART_Init();
     MX_TIM6_Init();
-    USER_UART_Recieve_INIT(&huart2, (uint8_t*) wifiRecieveBuffer,
+    USER_UART_Recieve_INIT(&Wifi_uart, (uint8_t*) wifiRecieveBuffer,
     WIFI_RECIEVE_ARRAY_SIZE);
     }

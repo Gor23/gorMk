@@ -983,7 +983,7 @@ void USER_UART_Receive_IT(UART_HandleTypeDef *huart)
 	     {
 	       huart -> resrtTimer(0);
 	     }
-	   if (huart->RxXferCount>huart->RxXferSize)
+	   if (huart->RxXferCount>=huart->RxXferSize)
 	   {
 		   huart->RxXferCount = 0;
 	   }
