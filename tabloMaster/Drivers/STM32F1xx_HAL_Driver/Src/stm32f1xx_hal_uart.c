@@ -1353,6 +1353,10 @@ void HAL_UART_IRQHandler(UART_HandleTypeDef *huart)
     /* Set the UART state ready to be able to start again the process */
     huart->State = HAL_UART_STATE_READY;
     
+	//USER CODE BEGIN//
+    huart->ErrorCode = HAL_UART_ERROR_NONE;
+	//USER CODE END
+
     HAL_UART_ErrorCallback(huart);
   }  
 }

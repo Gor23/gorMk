@@ -288,42 +288,42 @@ int main(void)
 //		  HAL_Delay(100);
 //	  }
 
-	if ((ready) && (!dmaSend))
-	    {
-	    HAL_Delay(3);
-	    Video_cmd((uint8_t*) "BUFC\n", strlen("BUFC\n"));
-	    HAL_Delay(4);
-	    answerTimer = 0;
-	    while (!Video_get_answer() && (answerTimer < ANSWER_TIMER_STOP_VALUE))
-		{
-		}
-	    if (answerTimer >= ANSWER_TIMER_STOP_VALUE)
-		{
-		HAL_Delay(700);
-		Video_send_init_to_display(init_array, sizeof(init_array));
-		HAL_Delay(50);
-		}
-	    else
-		{
-		Video_send_data_to_display();
-		dmaSend = 1;
-		}
-	    answerTimer = 0;
-	    Video_clear_recieve_buffer();
-	    // USER_UART_clear_rx(&huart2);
-	    /*if (ptr == NULL)
-	     {
-	     answerOk = 0;
-	     }
-	     else
-	     {*/
-	    // Video_change_buffers(&mainBuffer, videoBuffer, videoBufferSec);
-	    //	answerOk = 1;
-	    //HAL_UART_Transmit_DMA(&huart2, (uint8_t*)&lcd_image_mas, TRANCIEVE_ARRAY_SIZE);
-	    // }
-	    ready = 0;
-	    timer1 = 0;
-	    }
+//	if ((ready) && (!dmaSend))
+//	    {
+//	    HAL_Delay(3);
+//	    Video_cmd((uint8_t*) "BUFC\n", strlen("BUFC\n"));
+//	    HAL_Delay(4);
+//	    answerTimer = 0;
+//	    while (!Video_get_answer() && (answerTimer < ANSWER_TIMER_STOP_VALUE))
+//		{
+//		}
+//	    if (answerTimer >= ANSWER_TIMER_STOP_VALUE)
+//		{
+//		HAL_Delay(700);
+//		Video_send_init_to_display(init_array, sizeof(init_array));
+//		HAL_Delay(50);
+//		}
+//	    else
+//		{
+//		Video_send_data_to_display();
+//		dmaSend = 1;
+//		}
+//	    answerTimer = 0;
+//	    Video_clear_recieve_buffer();
+//	    // USER_UART_clear_rx(&huart2);
+//	    /*if (ptr == NULL)
+//	     {
+//	     answerOk = 0;
+//	     }
+//	     else
+//	     {*/
+//	    // Video_change_buffers(&mainBuffer, videoBuffer, videoBufferSec);
+//	    //	answerOk = 1;
+//	    //HAL_UART_Transmit_DMA(&huart2, (uint8_t*)&lcd_image_mas, TRANCIEVE_ARRAY_SIZE);
+//	    // }
+//	    ready = 0;
+//	    timer1 = 0;
+//	    }
 
 	if ((timer2 == timerStopValue) && (!ready))
 	    {
